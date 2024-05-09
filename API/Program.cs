@@ -1,17 +1,34 @@
-using System;
-using System.Globalization;
 using API.Context;
 using API.Models;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.AddEventSourceLogger();
+
+
+// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+        });
+});
 
 // Add services to the container.
 builder
@@ -27,6 +44,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.AddDbContext<DBContext>(o =>
 {
     o.UseSqlServer(builder.Configuration.GetConnectionString("PesonalCollection"));
@@ -35,16 +53,19 @@ builder.Services.AddDbContext<DBContext>(o =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<API.Services.AuthenticationService>();
+builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<ValidationService>();
+
+builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("Jwt"));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
-
-app.UseSwaggerUI();
-
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+});
 app.UseHttpsRedirection();
 
 app.UseRouting();
@@ -71,5 +92,7 @@ else
     app.UseRequestLocalization(defaultLocalizationOptions);
 }
 app.MapControllers();
+
+app.UseCors("AllowAllOrigins");
 
 app.Run();

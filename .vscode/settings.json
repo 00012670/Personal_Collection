@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/718395a4-bbfd-4e51-8473-51ffe983f2db/resourceGroups/rg1/providers/Microsoft.Web/sites/PersonalCollectionAPI",
+    "appService.deploySubpath": "API\\publish"
+}

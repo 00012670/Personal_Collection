@@ -1,5 +1,4 @@
 using API.Context;
-using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

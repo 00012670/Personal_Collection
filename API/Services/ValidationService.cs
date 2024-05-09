@@ -1,19 +1,13 @@
-using System.Linq;
-using System.Security.Claims;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using API.Context;
-using API.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
 {
     public class ValidationService
     {
+        private static readonly Regex EmailRegex = new Regex(
+           @"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$",
+           RegexOptions.Compiled
+       );
         public ValidationResult ValidateRegistrationData(
             string username,
             string email,
@@ -27,6 +21,10 @@ namespace API.Services
             )
             {
                 return new ValidationResult(false, "Username, email and password are required.");
+            }
+            if (!EmailRegex.IsMatch(email))
+            {
+                return new ValidationResult(false, "Email is not in correct format.");
             }
 
             if (password.Length < 8)

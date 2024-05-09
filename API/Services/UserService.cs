@@ -1,12 +1,6 @@
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using API.Context;
 using API.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services
@@ -20,6 +14,12 @@ namespace API.Services
         {
             _context = context;
             _passwordHasher = passwordHasher;
+        }
+
+        public async Task<bool> CheckIfUserExists(string username, string email)
+        {
+            var existingUser = await FindByUsernameOrEmail(username, email);
+            return existingUser != null;
         }
 
         public async Task<User?> FindByUsernameOrEmail(string username, string email)

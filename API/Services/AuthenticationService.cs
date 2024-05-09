@@ -1,54 +1,51 @@
-using System.Linq;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using API.Context;
+using System.Text;
 using API.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Services
 {
-    public class AuthenticationService
-    {
-        private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+    public class AuthenticationService(
+        IPasswordHasher<User> passwordHasher,
+        IOptions<JWTSettings> jwtSettings
 
-        public AuthenticationService(
-            IPasswordHasher<User> passwordHasher,
-            IHttpContextAccessor httpContextAccessor
-        )
+    )
+    {
+        private readonly IPasswordHasher<User> _passwordHasher = passwordHasher;
+        private readonly string? _jwtSecret = jwtSettings.Value.SecretFKey;
+
+        public string GenerateJwtToken(User user)
         {
-            _passwordHasher = passwordHasher;
-            _httpContextAccessor = httpContextAccessor;
+            if (_jwtSecret == null)
+            {
+                throw new InvalidOperationException("JWT Secret is not configured.");
+            }
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtSecret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.Role.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         public bool VerifyPassword(User user, string password)
         {
             return _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password)
                 == PasswordVerificationResult.Success;
-        }
-
-        public async Task SignIn(User user)
-        {
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Username) };
-            var claimsIdentity = new ClaimsIdentity(
-                claims,
-                CookieAuthenticationDefaults.AuthenticationScheme
-            );
-            var authProperties = new AuthenticationProperties();
-
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext != null)
-            {
-                await httpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity),
-                    authProperties
-                );
-            }
         }
     }
 }
