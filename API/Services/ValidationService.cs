@@ -26,12 +26,10 @@ namespace API.Services
             {
                 return new ValidationResult(false, "Email is not in correct format.");
             }
-
             if (password.Length < 8)
             {
                 return new ValidationResult(false, "Password must be at least 8 characters long.");
             }
-
             if (!Regex.IsMatch(password, @"[^a-zA-Z0-9\s]"))
             {
                 return new ValidationResult(
@@ -39,7 +37,6 @@ namespace API.Services
                     "Password must contain at least one special character."
                 );
             }
-
             return new ValidationResult(true, null);
         }
 
@@ -58,11 +55,11 @@ namespace API.Services
     {
         public bool IsValid { get; }
         public string? ErrorMessage { get; }
-
         public ValidationResult(bool isValid, string? errorMessage = null)
         {
             IsValid = isValid;
             ErrorMessage = errorMessage;
         }
+
     }
 }

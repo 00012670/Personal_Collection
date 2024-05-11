@@ -1,0 +1,25 @@
+.navbar-img {
+  width: auto;
+  height: 40px;
+  border-radius: 10%;
+}
+
+.sidebar-text{
+  color: #262730;
+  font-size: 19px;
+  font-weight:500;
+  padding-left: 1rem !important;
+  text-decoration: none;
+}
+
+.logo {
+  font-weight:500;
+}
+
+#sidebarMenu {
+  height: 100vh;
+}
+
+.svg {
+  cursor: pointer;
+}

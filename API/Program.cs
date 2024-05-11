@@ -45,6 +45,8 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 
+
+
 builder.Services.AddDbContext<DBContext>(o =>
 {
     o.UseSqlServer(builder.Configuration.GetConnectionString("PesonalCollection"));

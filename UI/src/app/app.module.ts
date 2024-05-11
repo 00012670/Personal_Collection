@@ -12,10 +12,18 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 //import { FilterPipe } from './components/filter.pipe';
 import { CommonModule } from '@angular/common';
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function tokenGetter() {
+  return localStorage.getItem('access_token');
+}
 
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent,
+    SignupComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -27,6 +35,14 @@ import { CommonModule } from '@angular/common';
     NgbModalModule,
     NgToastModule,
     CommonModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:5176"],
+        disallowedRoutes: ["http://localhost:5176/login"]
+      },
+    }),
+
   ],
   providers: [],
 
