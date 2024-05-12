@@ -13,6 +13,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 //import { FilterPipe } from './components/filter.pipe';
 import { CommonModule } from '@angular/common';
 import { JwtModule } from '@auth0/angular-jwt';
+import { NavbarComponent } from './components/navbar/navbar.component';
+
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -23,7 +25,8 @@ export function tokenGetter() {
     AppComponent,
     LoginComponent,
     SignupComponent,
-    DashboardComponent
+    DashboardComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,

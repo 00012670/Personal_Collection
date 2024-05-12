@@ -1,15 +1,56 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Personal Collection</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    </form>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <button class="btn btn-outline-success my-2 my-sm-0" style="margin-left: 1rem;" routerLink="/signup"
+          type="submit">Sign up</button>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="cursor: pointer;" (click)="logout()">Sign out</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<!--
 
 <nav style="background-color: #1b1c22;" class="navbar navbar-expand-lg navbar-dark ">
-  <!-- <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-5 logo" [routerLink]="['/dashboard', userId]">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-5 logo" [routerLink]="['/dashboard', userId]">
     Personal Collection
-  </a> -->
+  </a>
 
-  <!-- <form class="form-inline my-2 my-lg-0 mx-auto">
+  <form class="form-inline my-2 my-lg-0 mx-auto">
     <input class="form-control mr-sm-2 w-100  rounded-0 border-0" type="search" [(ngModel)]="searchText"
       [ngModelOptions]="{ standalone: true }" placeholder="Search" aria-label="Search"
       (input)="searchService.changeSearchText(searchText)">
-  </form> -->
-
+  </form>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
@@ -23,10 +64,10 @@
           Hello, {{username}}
         </a>
         <ul class="dropdown-menu dropdown-menu-end cursor-pointer" aria-labelledby="profileDropdown">
-          <!-- <ng-container *ngFor="let userProfile of userProfiles">
+          <ng-container *ngFor="let userProfile of userProfiles">
             <li><a *ngIf="role === 'User'" class="dropdown-item" [routerLink]="['/profile/' + userProfile?.userId]">View
                 Profile</a></li>
-          </ng-container> -->
+          </ng-container>
           <li>
             <hr class="dropdown-divider">
           </li>
@@ -37,4 +78,4 @@
 
     <img *ngIf="imageUrl" [src]="imageUrl" class="navbar-img">
   </div>
-</nav>
+</nav> -->

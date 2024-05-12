@@ -20,6 +20,8 @@
     "@angular/router": "^17.3.7",
     "@auth0/angular-jwt": "^5.2.0",
     "@ng-bootstrap/ng-bootstrap": "^16.0.0",
+    "@sentry/angular": "^7.114.0",
+    "@sentry/tracing": "^7.114.0",
     "ng-angular-popup": "^0.5.2",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

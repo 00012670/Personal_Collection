@@ -49,7 +49,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DBContext>(o =>
 {
-    o.UseSqlServer(builder.Configuration.GetConnectionString("PesonalCollection"));
+    o.UseSqlServer(builder.Configuration.GetConnectionString("ProdConnection"));
+});
+
+builder.Services.AddSpaStaticFiles(configuration =>
+{
+    configuration.RootPath = "wwwroot";
 });
 
 builder.Services.AddHttpContextAccessor();
@@ -69,6 +74,13 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
 app.UseHttpsRedirection();
+
+app.UseSpaStaticFiles();
+
+app.UseSpa(spa =>
+{
+    spa.Options.DefaultPage = "/index.html";
+});
 
 app.UseRouting();
 
