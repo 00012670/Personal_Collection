@@ -25,6 +25,7 @@ builder.Services.AddCors(options =>
         {
             builder
             .AllowAnyOrigin()
+            //   .WithOrigins("http://trustedwebsite.com")
             .AllowAnyMethod()
             .AllowAnyHeader();
         });
@@ -44,12 +45,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddSwaggerGen();
 
-
-
-
 builder.Services.AddDbContext<DBContext>(o =>
 {
-    o.UseSqlServer(builder.Configuration.GetConnectionString("ProdConnection"));
+    o.UseSqlServer(builder.Configuration.GetConnectionString("PersonalCollection"));
 });
 
 builder.Services.AddSpaStaticFiles(configuration =>
@@ -67,20 +65,50 @@ builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("Jwt"))
 
 var app = builder.Build();
 
+
+// Check database connection
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<DBContext>();
+        context.Database.OpenConnection();
+        Console.WriteLine("Successfully connected to the database.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred while connecting to the database: {ex.Message}");
+    }
+    finally
+    {
+        var context = services.GetRequiredService<DBContext>();
+        if (context.Database.GetDbConnection().State == System.Data.ConnectionState.Open)
+        {
+            context.Database.CloseConnection();
+        }
+    }
+}
+
+// Use developer exception page in development environment
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
+
 // Configure the HTTP request pipeline.
 app.UseSwagger();
+
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
 app.UseHttpsRedirection();
-
-app.UseSpaStaticFiles();
-
-app.UseSpa(spa =>
-{
-    spa.Options.DefaultPage = "/index.html";
-});
 
 app.UseRouting();
 
@@ -97,8 +125,6 @@ if (localizationOptionsService != null)
 }
 else
 {
-    // Handle the case when the service is not registered
-    // For example, you can use a default RequestLocalizationOptions
     var defaultLocalizationOptions = new RequestLocalizationOptions
     {
         DefaultRequestCulture = new RequestCulture("en-US"),

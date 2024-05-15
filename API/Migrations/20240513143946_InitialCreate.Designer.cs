@@ -4,6 +4,7 @@ using API.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20240513143946_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,6 +95,9 @@ namespace API.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageURL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -115,9 +121,6 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomFieldId"));
 
-                    b.Property<int>("CollectionID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
@@ -129,11 +132,36 @@ namespace API.Migrations
 
                     b.HasKey("CustomFieldId");
 
-                    b.HasIndex("CollectionID");
-
                     b.HasIndex("ItemId");
 
-                    b.ToTable("CustomFields", "Users");
+                    b.ToTable("CustomField", "Users");
+                });
+
+            modelBuilder.Entity("Field", b =>
+                {
+                    b.Property<int>("FieldId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FieldId"));
+
+                    b.Property<int>("CollectionID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("FieldId");
+
+                    b.HasIndex("CollectionID");
+
+                    b.ToTable("Fields", "Users");
                 });
 
             modelBuilder.Entity("Item", b =>
@@ -148,6 +176,9 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tags")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ItemId");
@@ -166,28 +197,14 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FieldValue");
 
                     b.HasKey("ItemId", "CustomFieldId");
 
                     b.HasIndex("CustomFieldId");
 
                     b.ToTable("ItemCustomFields", "Users");
-                });
-
-            modelBuilder.Entity("ItemTag", b =>
-                {
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ItemId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ItemTags", "Users");
                 });
 
             modelBuilder.Entity("Tag", b =>
@@ -209,7 +226,7 @@ namespace API.Migrations
             modelBuilder.Entity("Collection", b =>
                 {
                     b.HasOne("Category", "Category")
-                        .WithMany("Collection")
+                        .WithMany()
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -227,15 +244,18 @@ namespace API.Migrations
 
             modelBuilder.Entity("CustomField", b =>
                 {
-                    b.HasOne("Collection", "Collection")
-                        .WithMany("CustomFields")
-                        .HasForeignKey("CollectionID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Item", null)
                         .WithMany("CustomFields")
                         .HasForeignKey("ItemId");
+                });
+
+            modelBuilder.Entity("Field", b =>
+                {
+                    b.HasOne("Collection", "Collection")
+                        .WithMany("Fields")
+                        .HasForeignKey("CollectionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Collection");
                 });
@@ -254,9 +274,9 @@ namespace API.Migrations
             modelBuilder.Entity("ItemCustomField", b =>
                 {
                     b.HasOne("CustomField", "CustomField")
-                        .WithMany("ItemCustomFields")
+                        .WithMany()
                         .HasForeignKey("CustomFieldId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Item", "Item")
@@ -270,45 +290,16 @@ namespace API.Migrations
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("ItemTag", b =>
-                {
-                    b.HasOne("Item", "Item")
-                        .WithMany("Tags")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Tag", "Tag")
-                        .WithMany("ItemTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-
-                    b.Navigation("Tag");
-                });
-
             modelBuilder.Entity("API.Models.User", b =>
                 {
                     b.Navigation("Collections");
                 });
 
-            modelBuilder.Entity("Category", b =>
-                {
-                    b.Navigation("Collection");
-                });
-
             modelBuilder.Entity("Collection", b =>
                 {
-                    b.Navigation("CustomFields");
+                    b.Navigation("Fields");
 
                     b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("CustomField", b =>
-                {
-                    b.Navigation("ItemCustomFields");
                 });
 
             modelBuilder.Entity("Item", b =>
@@ -316,13 +307,6 @@ namespace API.Migrations
                     b.Navigation("CustomFields");
 
                     b.Navigation("ItemCustomFields");
-
-                    b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("Tag", b =>
-                {
-                    b.Navigation("ItemTags");
                 });
 #pragma warning restore 612, 618
         }

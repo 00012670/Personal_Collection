@@ -14,6 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { CollectionComponent } from './components/collection/collection.component';
 
 
 export function tokenGetter() {
@@ -27,6 +28,7 @@ export function tokenGetter() {
     SignupComponent,
     DashboardComponent,
     NavbarComponent,
+    CollectionComponent
   ],
   imports: [
     BrowserModule,

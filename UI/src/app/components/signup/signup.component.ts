@@ -33,25 +33,27 @@ export class SignupComponent {
     });
   }
 
-  onSignup() {
+onSignup() {
     if (this.signUpForm.valid) {
-      this.identityService.signUp(this.signUpForm.value).subscribe(
-        (response: any) => {
-          const token = response.token;
-          const decodedToken = this.identityService.decodeToken(token);
-          this.identityService.currentUser.next(decodedToken);
-          this.toast.success({ detail: "Success", summary: "Registered successfully", duration: 5000 });
-          this.router.navigate(['dashboard']);
-        },
-        (error) => {
-          this.toast.error({ detail: "ERROR", summary: error.message, duration: 5000 });
-        }
-      );
+        this.identityService.signUp(this.signUpForm.value).subscribe(
+            (response: any) => {
+                console.log('Signup response:', response);  // Log the response
+                const token = response.token;
+                const decodedToken = this.identityService.decodeToken(token);
+                this.identityService.currentUser.next(decodedToken);
+                this.toast.success({ detail: "Success", summary: "Registered successfully", duration: 5000 });
+                this.router.navigate(['dashboard']);
+            },
+            (error) => {
+                console.error('Signup error:', error);  // Log the error
+                this.toast.error({ detail: "ERROR", summary: error.message, duration: 5000 });
+            }
+        );
     } else {
-      ValidateForm.validateAllFormFileds(this.signUpForm);
-      this.toast.error({ detail: "ERROR", summary: "Your form is invalid", duration: 5000 });
+        ValidateForm.validateAllFormFileds(this.signUpForm);
+        this.toast.error({ detail: "ERROR", summary: "Your form is invalid", duration: 5000 });
     }
-  }
+}
 
   hideShowPass() {
     this.isText = !this.isText;
