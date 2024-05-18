@@ -4,9 +4,8 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './components/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NgToastModule } from 'ng-angular-popup';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -15,7 +14,9 @@ import { CommonModule } from '@angular/common';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CollectionComponent } from './components/collection/collection.component';
-
+import { AddCollectionComponent } from './components/collection/add-collection/add-collection.component';
+import { EditCollectionComponent } from './components/collection/edit-collection/edit-collection.component';
+import { LoginComponent } from './components/login/login.component';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -28,7 +29,9 @@ export function tokenGetter() {
     SignupComponent,
     DashboardComponent,
     NavbarComponent,
-    CollectionComponent
+    CollectionComponent,
+    AddCollectionComponent,
+    EditCollectionComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +53,6 @@ export function tokenGetter() {
 
   ],
   providers: [],
-
   bootstrap: [AppComponent]
 })
 export class AppModule { }

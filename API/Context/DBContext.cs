@@ -33,15 +33,15 @@ namespace API.Context
             modelBuilder.Entity<Collection>(entity =>
            {
                entity.HasKey(e => e.CollectionId);
-               entity.HasOne(e => e.User).WithMany(u => u.Collections).HasForeignKey(e => e.UserID);
-               entity.HasOne(e => e.Category).WithMany(c => c.Collection).HasForeignKey(e => e.CategoryID);
-               entity.HasMany(e => e.Items).WithOne(i => i.Collection).HasForeignKey(i => i.CollectionID);
-               entity.HasMany(e => e.CustomFields).WithOne(f => f.Collection).HasForeignKey(f => f.CollectionID);
+               entity.HasOne(e => e.User).WithMany(u => u.Collections).HasForeignKey(e => e.UserId);
+               //  entity.HasOne(e => e.Category).WithMany(c => c.Collection).HasForeignKey(e => e.CategoryID);
+               //    entity.HasMany(e => e.Items).WithOne(i => i.Collection).HasForeignKey(i => i.CollectionID);
+               //    entity.HasMany(e => e.CustomFields).WithOne(f => f.Collection).HasForeignKey(f => f.CollectionID);
            });
             modelBuilder.Entity<Item>(entity =>
             {
                 entity.HasKey(e => e.ItemId);
-                entity.HasOne(e => e.Collection).WithMany(c => c.Items).HasForeignKey(e => e.CollectionID);
+                // entity.HasOne(e => e.Collection).WithMany(c => c.Items).HasForeignKey(e => e.CollectionID);
                 entity.HasMany(e => e.ItemCustomFields).WithOne(icf => icf.Item).HasForeignKey(icf => icf.ItemId);
                 entity.HasMany(e => e.Tags).WithOne(it => it.Item).HasForeignKey(it => it.ItemId);
             });

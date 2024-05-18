@@ -7,8 +7,6 @@
   <p>Your role is {{ currentUser?.role }}.</p>
 </div>
 
-
-
 <div *ngIf="currentUser.role === 'Admin'">
   <button class="btn btn-secondary mr" (click)="blockSelectedUsers()">Block <svg xmlns="http://www.w3.org/2000/svg" x="0px"
       y="0px" width="20" height="20" viewBox="0,0,256,256">

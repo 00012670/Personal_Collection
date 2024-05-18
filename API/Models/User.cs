@@ -9,6 +9,7 @@ namespace API.Models
         [Required]
         [MaxLength(50)]
         public string Username { get; set; } = string.Empty;
+        
         [Required]
         [EmailAddress]
         [MaxLength(100)]

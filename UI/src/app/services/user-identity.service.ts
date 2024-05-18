@@ -68,4 +68,7 @@ export class UserIdentityService {
     return decodedToken;
   }
 
+  getUserId(): number | null {
+    return this.currentUser.value?.nameid ? Number(this.currentUser.value.nameid) : null;
+  }
 }

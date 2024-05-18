@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import ValidateForm from '../../helpers/validateForm';
-import { UserIdentityService } from '../../services/user-identity.service';
+import { UserIdentityService } from 'src/app/services/user-identity.service';
 
 @Component({
   selector: 'app-signup',
