@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Collection, CollectionCategory } from 'src/app/models/collection.model';
-import { Router } from '@angular/router';
-import { NgToastService } from 'ng-angular-popup';
+import { FormGroup } from '@angular/forms';
+import { CategoryOptions, Collection, CollectionCategory } from 'src/app/models/collection.model';
 import { CollectionService } from 'src/app/services/collection.service';
 import { UserIdentityService } from 'src/app/services/user-identity.service';
-import { CollectionFormService } from 'src/app/services/collection-form.service';
+import { FormValidationService } from 'src/app/services/form-validation.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-collection',
@@ -16,64 +15,32 @@ export class AddCollectionComponent {
   collectionForm!: FormGroup;
   userId!: number;
   submited = false;
-
-  collection: Collection = {
-    collectionId: 0,
-    name: '',
-    description: '',
-    userId: 0,
-    category: CollectionCategory.Other,
-  };
-
-  categoryOptions: CollectionCategory[] = [
-    CollectionCategory.Books,
-    CollectionCategory.Stamps,
-    CollectionCategory.Coins,
-    CollectionCategory.Art,
-    CollectionCategory.Antiques,
-    CollectionCategory.Toys,
-    CollectionCategory.Memorabilia,
-    CollectionCategory.Plants,
-    CollectionCategory.Photographs,
-    CollectionCategory.MusicalInstruments,
-    CollectionCategory.Other
-  ];
+  collection!: Collection;
+  categoryOptions = CategoryOptions;
 
   constructor(
     public collectionService: CollectionService,
     private userIdentityService: UserIdentityService,
-    private router: Router,
-    private toast: NgToastService,
-    private collectionFormService: CollectionFormService
+    private formValidation: FormValidationService,
+    private router: Router
   ) {
-    this.collectionForm = this.collectionFormService.createForm(this.collection);
+    this.collection = {} as Collection;
+    this.collectionForm = this.formValidation.collectionValidator({} as Collection);
   }
 
   ngOnInit(): void {
     this.userId = this.userIdentityService.getUserId() ?? 0;
+    this.collection.userId = this.userId;
   }
 
   createCollection(): void {
     this.submited = true;
-    if (this.collectionForm.invalid || !this.userId) {
-      return;
-    }
     this.collection.userId = this.userId;
-    const requestBody = this.collectionFormService.getFormValues(this.collectionForm, this.collection);
-    this.collectionService.createCollection(requestBody).subscribe(
-      () => this.handleSuccess(),
-      (error) => this.handleError(error)
+    this.formValidation.submitForm(this.collectionForm, this.collection, (body) => this.collectionService.createCollection(body))
+    .subscribe(
+      () => this.formValidation.handleSuccess('Collection added successfully', this.router, 'collections'),
+      (error) => this.formValidation.handleError(error, 'Error adding collection')
     );
-  }
-
-  handleSuccess(): void {
-    this.router.navigate(['/collections']);
-    this.toast.success({ detail: 'SUCCESS', summary: 'Skill added successfully', duration: 4000 });
-  }
-
-  handleError(error: any): void {
-    console.error(error);
-    this.toast.error({ detail: 'ERROR', summary: 'Error adding skill', duration: 4000 });
   }
 }
 

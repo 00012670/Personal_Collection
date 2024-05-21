@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" [ngClass]="{'bg-dark': isDarkMode, 'navbar-dark': isDarkMode}">
   <a class="navbar-brand" href="#">Personal Collection</a>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,49 +28,9 @@
     </ul>
     <form class="form-inline my-2 my-lg-0 ml-auto d-flex">
       <input class="form-control mr-sm-2 mr" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <button class="btn btn-outline-success my-2 my-sm-0 mr" type="submit">Search</button>
     </form>
+    <app-theme-toggle></app-theme-toggle>
   </div>
 </nav>
 
-
-<!--
-
-<nav style="background-color: #1b1c22;" class="navbar navbar-expand-lg navbar-dark ">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-5 logo" [routerLink]="['/dashboard', userId]">
-    Personal Collection
-  </a>
-
-  <form class="form-inline my-2 my-lg-0 mx-auto">
-    <input class="form-control mr-sm-2 w-100  rounded-0 border-0" type="search" [(ngModel)]="searchText"
-      [ngModelOptions]="{ standalone: true }" placeholder="Search" aria-label="Search"
-      (input)="searchService.changeSearchText(searchText)">
-  </form>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="/dashboard/{{userId}}">Home</a>
-      </li>
-
-      <li class="nav-item dropdown">
-        <a class="nav-link px-3 cursor-pointer" id="profileDropdown" role="button" data-bs-toggle="dropdown"
-          aria-expanded="false">
-          Hello, {{username}}
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end cursor-pointer" aria-labelledby="profileDropdown">
-          <ng-container *ngFor="let userProfile of userProfiles">
-            <li><a *ngIf="role === 'User'" class="dropdown-item" [routerLink]="['/profile/' + userProfile?.userId]">View
-                Profile</a></li>
-          </ng-container>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-          <li><a class="dropdown-item" (click)="logout()" style="cursor: pointer;">Sign out</a></li>
-        </ul>
-      </li>
-    </ul>
-
-    <img *ngIf="imageUrl" [src]="imageUrl" class="navbar-img">
-  </div>
-</nav> -->

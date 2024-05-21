@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { SearchService } from 'src/app/services/search.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { UserIdentityService } from 'src/app/services/user-identity.service';
 import { Role, Status, User } from 'src/app/models/user.model';
+import { ThemeService } from 'src/app/services/theme.service';
+import { UserIdentityService } from 'src/app/services/user-identity.service';
 import { UserService } from 'src/app/services/user.service';
+import { combineLatest } from 'rxjs';
+import { UserOperationsService } from 'src/app/services/user-operaton.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,29 +13,41 @@ import { UserService } from 'src/app/services/user.service';
 })
 
 export class DashboardComponent implements OnInit {
-
   userId: number | null = null;
   role!: string;
   users: User[] = [];
-  currentUser: any;
+  currentUser: any = { role: 'User' };
   selectedUsers: User[] = [];
   searchText: any;
+  isDarkMode!: boolean;
 
   constructor(
     public userIdentity: UserIdentityService,
     public userService: UserService,
-    private modalService: NgbModal,
+    private userOperations: UserOperationsService,
+    private themeService: ThemeService,
   ) { }
 
   ngOnInit(): void {
-    this.userIdentity.currentUser.subscribe(user => {
+    combineLatest([
+      this.themeService.isDarkMode(),
+      this.userIdentity.currentUser
+    ]).subscribe(([isDarkMode, user]) => {
+      this.isDarkMode = isDarkMode;
       this.currentUser = user;
+      if (!this.currentUser) {
+        this.currentUser = { role: 'User' };
+      }
+      if (this.currentUser.role === 'Admin') {
+        this.loadAllUsers();
+      }
     });
-    if (this.currentUser.role === 'Admin') {
-      this.userService.getAllUsers().subscribe(users => {
-        this.users = users;
-      });
-    }
+  }
+
+  loadAllUsers(): void {
+    this.userService.getAllUsers().subscribe(users => {
+      this.users = users;
+    });
   }
 
   toggleSelection(user: User): void {
@@ -48,49 +60,41 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteSelectedUsers(): void {
-    this.userService.deleteUsers(this.selectedUsers).subscribe(() => {
+    this.userOperations.deleteUsers(this.selectedUsers).subscribe(() => {
       this.users = this.users.filter(user => !this.selectedUsers.includes(user));
       this.selectedUsers = [];
     });
   }
 
   blockSelectedUsers(): void {
-    const usersToBlock = this.selectedUsers.length > 0 ? this.selectedUsers : this.users;
-    usersToBlock.forEach(user => {
-      this.userService.setAccountStatus(user.userId, Status.Blocked).subscribe(() => {
-        user.status = Status.Blocked;
-      });
-    });
-    this.selectedUsers = [];
+    this.updateUserStatus(Status.Blocked);
   }
 
   unblockSelectedUsers(): void {
-    const usersToUnblock = this.selectedUsers.length > 0 ? this.selectedUsers : this.users;
-    usersToUnblock.forEach(user => {
-      this.userService.setAccountStatus(user.userId, Status.Active).subscribe(() => {
-        user.status = Status.Active;
-      });
-    });
-    this.selectedUsers = [];
+    this.updateUserStatus(Status.Active);
   }
 
-  addSelectedToAdmins(): void {
-    const usersToAdd = this.selectedUsers.length > 0 ? this.selectedUsers : this.users;
-    usersToAdd.forEach(user => {
-      this.userService.setAccountRole(user.userId, Role.Admin).subscribe(() => {
-        user.role = Role.Admin;
-      });
-    });
-    this.selectedUsers = [];
+  grandAdminRole(): void {
+    this.updateUserRole(Role.Admin);
   }
 
-  removeSelectedFromAdmins(): void {
-    const usersToRemove = this.selectedUsers.length > 0 ? this.selectedUsers : this.users;
-    usersToRemove.forEach(user => {
-      this.userService.setAccountRole(user.userId, Role.User).subscribe(() => {
-        user.role = Role.User;
-      });
+  removeAdminRole(): void {
+    this.updateUserRole(Role.User);
+  }
+
+  private updateUserStatus(status: Status): void {
+    const usersToUpdate = this.selectedUsers.length > 0 ? this.selectedUsers : this.users;
+    this.userOperations.updateUsersStatus(usersToUpdate, status).subscribe(() => {
+      usersToUpdate.forEach(user => user.status = status);
+      this.selectedUsers = [];
     });
-    this.selectedUsers = [];
+  }
+
+  private updateUserRole(role: Role): void {
+    const usersToUpdate = this.selectedUsers.length > 0 ? this.selectedUsers : this.users;
+    this.userOperations.updateUsersRole(usersToUpdate, role).subscribe(() => {
+      usersToUpdate.forEach(user => user.role = role);
+      this.selectedUsers = [];
+    });
   }
 }

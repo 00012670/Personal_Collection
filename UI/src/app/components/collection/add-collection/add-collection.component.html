@@ -1,11 +1,13 @@
-<div class="row justify-content-center mt-4">
+<div class="row justify-content-center mt-5">
   <div class="col-6">
-    <h4>Create collection</h4>
+
+    <h2>Create collection</h2>
+
     <form [formGroup]="collectionForm" (ngSubmit)="createCollection()">
 
       <div class="form-group mt-3">
         <label for="name">Name</label>
-        <input type="text" class="form-control mt-2" id="name" formControlName="name" placeholder="Enter name"
+        <input type="text" class="form-control dark-input mt-2" id="name" formControlName="name" placeholder="Enter name"
           [ngClass]="{'is-invalid': submited && collectionForm.get('name')!.errors}">
         <div *ngIf="submited && collectionForm.get('name')!.hasError('required')" class="invalid-feedback">
           *Name is required
@@ -14,7 +16,7 @@
 
       <div class="form-group mt-3">
         <label for="description">Description</label>
-        <input type="text" class="form-control mt-2" id="description" formControlName="description"
+        <input type="text" class="form-control dark-input mt-2" id="description" formControlName="description"
           placeholder="Description" [ngClass]="{'is-invalid': submited && collectionForm.get('description')!.errors}">
         <div *ngIf="submited && collectionForm.get('description')!.hasError('required')" class="invalid-feedback">
           *Description is required
@@ -25,7 +27,7 @@
         <label for="category">Category</label>
         <select class="form-control mt-2" id="category" formControlName="category"
           [ngClass]="{'is-invalid': submited && collectionForm.get('category')!.errors}">
-          <option value="">Select a category</option>
+          <option value="" disabled selected>Select a category</option>
           <option *ngFor="let category of categoryOptions" [value]="category">{{ collectionService.getCategory(category)
             }}</option>
         </select>

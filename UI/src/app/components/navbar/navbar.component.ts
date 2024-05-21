@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { ThemeService } from 'src/app/services/theme.service';
 import { UserIdentityService } from 'src/app/services/user-identity.service';
-//import { SearchService } from 'src/app/services/search.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,12 +10,18 @@ import { UserIdentityService } from 'src/app/services/user-identity.service';
 export class NavbarComponent implements OnInit {
   showSearch: boolean | undefined;
   searchText: any;
+  isDarkMode!: boolean;
+
 
   constructor(
     private userIdentity: UserIdentityService,
+    public themeService: ThemeService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.themeService.isDarkMode().subscribe((isDarkMode: boolean) => {
+      this.isDarkMode = isDarkMode;
+    });
   }
 
   logout(): void {

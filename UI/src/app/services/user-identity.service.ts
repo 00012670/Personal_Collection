@@ -5,19 +5,21 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
-
 @Injectable({
   providedIn: 'root'
 })
 export class UserIdentityService {
   currentUser: BehaviorSubject<any> = new BehaviorSubject(null);
   baseApi: string = environment.baseApi
+  isText: boolean = false;
+  eyeIcon: string = 'fa-eye-slash';
+  type: string = 'password';
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private jwtHelper: JwtHelperService) {
-    const storedToken = localStorage.getItem('currentUser');
+    const storedToken = localStorage.getItem('token');
     if (storedToken) {
       const user = this.decodeToken(storedToken);
       if (user && user.role) {
@@ -35,7 +37,7 @@ export class UserIdentityService {
       .pipe(catchError(this.errorHandler),
         tap((response) => {
           this.currentUser.next(response);
-          localStorage.setItem('currentUser', JSON.stringify(response));
+          localStorage.setItem('token', JSON.stringify(response));
         }));
   }
 
@@ -44,7 +46,7 @@ export class UserIdentityService {
       .pipe(catchError(this.errorHandler),
         tap((response) => {
           this.currentUser.next(response);
-          localStorage.setItem('currentUser', JSON.stringify(response));
+          localStorage.setItem('token', JSON.stringify(response));
         }));
   }
 
@@ -52,6 +54,10 @@ export class UserIdentityService {
     localStorage.clear();
     this.currentUser.next(null);
     this.router.navigate(['login'])
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token')
   }
 
   storeToken(tokenValue: string) {

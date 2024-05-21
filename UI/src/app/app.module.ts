@@ -1,4 +1,4 @@
-import { SignupComponent } from './components/signup/signup.component';
+import { SignupComponent } from './components/auth/signup/signup.component';
 import { NgModule } from '@angular/core';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,12 +16,15 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { CollectionComponent } from './components/collection/collection.component';
 import { AddCollectionComponent } from './components/collection/add-collection/add-collection.component';
 import { EditCollectionComponent } from './components/collection/edit-collection/edit-collection.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { UserDashboardComponent } from './components/dashboard/user-dashboard/user-dashboard.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MatIconModule } from '@angular/material/icon';
+import { ThemeToggleComponent } from './components/theme-toggle/theme-toggle.component';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
 }
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +34,9 @@ export function tokenGetter() {
     NavbarComponent,
     CollectionComponent,
     AddCollectionComponent,
-    EditCollectionComponent
+    EditCollectionComponent,
+    UserDashboardComponent,
+    ThemeToggleComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +48,7 @@ export function tokenGetter() {
     NgbModalModule,
     NgToastModule,
     CommonModule,
+    MatIconModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
@@ -52,7 +58,9 @@ export function tokenGetter() {
     }),
 
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync('noop')
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

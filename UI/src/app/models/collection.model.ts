@@ -29,5 +29,20 @@ export enum CollectionCategory
   Other = 10
 }
 
+export const CategoryOptions: CollectionCategory[] = [
+  CollectionCategory.Books,
+  CollectionCategory.Stamps,
+  CollectionCategory.Coins,
+  CollectionCategory.Art,
+  CollectionCategory.Antiques,
+  CollectionCategory.Toys,
+  CollectionCategory.Memorabilia,
+  CollectionCategory.Plants,
+  CollectionCategory.Photographs,
+  CollectionCategory.MusicalInstruments,
+  CollectionCategory.Other
+];
+
+
 
 

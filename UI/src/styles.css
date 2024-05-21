@@ -1,1 +1,90 @@
 /* You can add global styles to this file, and also import other style files */
+/* Importing Bootstrap SCSS file. */
+/* Dark Theme Styles */
+.dark-theme {
+  background-color: #15161a;
+  color: #cdd2e6;
+}
+
+.dark-theme .table thead th {
+  color: #8989ff;
+}
+
+.dark-theme .table tbody td {
+  color:#cdd2e6;
+}
+
+.dark-theme input {
+  background-color: #15161a;
+  color: rgb(248, 249, 250);
+  border-color: #15161a;
+}
+
+.dark-theme option {
+  background-color: #15161a;
+  color: rgb(118, 118, 118);
+  border-color: rgb(248, 249, 250);
+}
+
+.dark-theme select {
+  background-color: #15161a;
+  color: rgb(118, 118, 118);
+  border-color: rgb(248, 249, 250);
+}
+
+.outer {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.panel {
+  width: 100%;
+  max-width: 400px;
+}
+
+.container {
+  height: 100%;
+}
+
+.centered {
+  width: 76%;
+  margin: auto;
+}
+
+.mr {
+  margin-right: 0.5rem;
+}
+
+.text-danger {
+  color: red;
+}
+
+.btn-primary {
+  background-color: #6161ff;
+  border-color: #6161ff;
+}
+
+.btn-primary:hover {
+  background-color: #5858ff;
+  border-color: #5858ff;
+}
+
+a {
+  color: #8888ff;
+}
+
+a:hover {
+  color: #5858ff;
+}
+
+.pointer {
+  cursor: pointer;
+  color: #8989ff;
+}
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

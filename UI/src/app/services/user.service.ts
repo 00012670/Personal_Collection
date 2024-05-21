@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, } from 'rxjs';
+import { Observable, map, } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Role, Status, User } from '../models/user.model';
 
@@ -14,7 +14,19 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseApiUrl}/users`);
+    return this.http.get<{ $id: string, $values: User[] }>(`${this.baseApiUrl}/users`).pipe(
+      map(response => {
+        if (!Array.isArray(response.$values)) {
+          console.error('Expected response.$values to be an array, but got', response.$values);
+          return [];
+        }
+        return response.$values.map(user => {
+          user.role = user.role;
+          user.status = user.status;
+          return user;
+        });
+      })
+    );
   }
 
   getRole(role: Role): string {

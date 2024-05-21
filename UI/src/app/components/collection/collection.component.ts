@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Collection, CollectionCategory } from 'src/app/models/collection.model';
+import { Observable } from 'rxjs';
+import { CategoryOptions, Collection } from 'src/app/models/collection.model';
+import { Role } from 'src/app/models/user.model';
 import { CollectionService } from 'src/app/services/collection.service';
+import { ThemeService } from 'src/app/services/theme.service';
 import { UserIdentityService } from 'src/app/services/user-identity.service';
-
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-collection',
   templateUrl: './collection.component.html',
@@ -11,29 +13,44 @@ import { UserIdentityService } from 'src/app/services/user-identity.service';
 })
 export class CollectionComponent {
   userId!: number;
+  role!: string;
+  isDarkMode!: boolean;
   collectionList: Collection[] = [];
-  categoryOptions: CollectionCategory[] = [
-    CollectionCategory.Books,
-    CollectionCategory.Stamps,
-    CollectionCategory.Coins,
-    CollectionCategory.Art,
-    CollectionCategory.Antiques,
-    CollectionCategory.Toys,
-    CollectionCategory.Memorabilia,
-    CollectionCategory.Plants,
-    CollectionCategory.Photographs,
-    CollectionCategory.MusicalInstruments,
-    CollectionCategory.Other
-  ];
+  categoryOptions = CategoryOptions;
 
   constructor(
     public collectionService: CollectionService,
-    private userIdentityService: UserIdentityService
+    private userIdentityService: UserIdentityService,
+    private userService: UserService,
+    private themeService: ThemeService
   ) { }
 
   ngOnInit(): void {
     this.userId = this.userIdentityService.getUserId() ?? 0;
-    this.collectionService.getCollectionsByUser(this.userId).subscribe(collections => {
+    this.getUserRole().then(() => this.getCollections());
+    this.themeService.isDarkMode().subscribe((isDarkMode: boolean) => {
+      this.isDarkMode = isDarkMode;
+    });
+  }
+
+  async getUserRole(): Promise<void> {
+    const users = await this.userService.getAllUsers().toPromise();
+    const user = users?.find(user => user.userId === this.userId);
+    this.role = user?.role.toString() ?? '';
+  }
+
+  getCollections(): void {
+    let collectionObservable;
+    if (this.role === Role.Admin.toString()) {
+      collectionObservable = this.collectionService.getCollections();
+    } else if (this.role === Role.User.toString() && this.userId !== null) {
+      collectionObservable = this.collectionService.getCollectionsByUser(this.userId);
+    }
+    this.subscribeToCollections(collectionObservable);
+  }
+
+  subscribeToCollections(collectionObservable: Observable<Collection[]> | undefined): void {
+    collectionObservable?.subscribe(collections => {
       this.collectionList = collections;
     });
   }

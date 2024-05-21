@@ -1,0 +1,62 @@
+<div class="outer">
+  <div class="container d-flex justify-content-center align-items-center">
+    <div class="panel">
+      <div class="panel border shadow-sm p-4 rounded" [class.bg-light]="!isDarkMode" [class.bg-dark]="isDarkMode">
+        <div class="panel-heading text-center">
+          <h3 class="pt-2 font-weight-bold">Welcome to Personal Collection</h3>
+          <p class="pt-1 text-muted">Please enter your details</p>
+        </div>
+        <div class="panel-body p-3">
+          <form [formGroup]="signUpForm" (ngSubmit)="onSignup()">
+
+            <!-- Username input -->
+            <div data-mdb-input-init class="form-outline mb-4">
+              <label class="form-label" for="signupUsername">Username</label>
+              <input formControlName="username" type="text" id="signupUsername" class="form-control" placeholder="Username" autocomplete="username" />
+              <small class="text-danger" *ngIf="signUpForm.get('username')?.hasError('required') && signUpForm.get('username')?.dirty">
+                *Username is required
+              </small>
+            </div>
+
+            <!-- Email input -->
+            <div data-mdb-input-init class="form-outline mb-4">
+              <label class="form-label" for="signupEmail">Email</label>
+              <input formControlName="email" type="email" id="signupEmail" class="form-control" placeholder="Email" autocomplete="email" />
+              <small class="text-danger" *ngIf="signUpForm.get('email')?.hasError('required') && signUpForm.get('email')?.dirty">
+                *Email is required
+              </small>
+              <small class="text-danger" *ngIf="signUpForm.get('email')?.hasError('email') && signUpForm.get('email')?.dirty">
+                *Invalid email format
+              </small>
+            </div>
+            <!-- Password input -->
+            <div data-mdb-input-init class="form-outline mb-4">
+              <label class="form-label mr" for="signupPassword">Password</label>
+              <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
+              <input formControlName="password" [type]="type" id="signupPassword" class="form-control" placeholder="Password" autocomplete="new-password" />
+              <small class="text-danger" *ngIf="signUpForm.controls['password'].dirty && signUpForm.hasError('required', 'password')">
+                *Password is required
+              </small>
+            </div>
+
+            <!-- Remember me checkbox -->
+            <div class="form-check mb-4">
+              <input type="checkbox" id="rememberMe" class="form-check-input" />
+              <label for="rememberMe" class="form-check-label">Remember me</label>
+            </div>
+
+            <!-- Submit button -->
+            <div class="form-outline">
+              <button type="submit" class="btn btn-primary btn-block w-100 mb-4">Sign up</button>
+            </div>
+
+            <!-- Register buttons -->
+            <div class="text-center mt-2">
+              <p>Already have an account? <a routerLink="/login">Login</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

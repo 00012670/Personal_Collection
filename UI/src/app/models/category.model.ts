@@ -5,3 +5,4 @@ export interface Category {
   name?: string;
   collections?: Collection[];
 }
+
