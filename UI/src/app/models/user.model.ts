@@ -5,6 +5,7 @@ export interface User {
   passwordHash: string;
   status: Status;
   role: Role;
+  isSelected: boolean;
 }
 
 export enum Status {

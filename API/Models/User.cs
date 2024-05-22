@@ -17,6 +17,7 @@ namespace API.Models
         [Required]
         [MinLength(8)]
         public string PasswordHash { get; set; } = string.Empty;
+        public bool isSelected { get; set; }
         public Status Status { get; set; } = Status.Active;
         public Role Role { get; set; } = Role.User;
         public List<Collection>? Collections { get; set; }

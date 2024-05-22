@@ -47,7 +47,7 @@
         </g>
       </svg></button>
     <br>
-    <button class="btn btn-primary mr mt-2" (click)="grandAdminRole()">Grant admin role</button>
+    <button class="btn btn-primary mr mt-2" (click)="grantAdminRole()">Grant admin role</button>
     <button class="btn btn-primary mt-2" (click)="removeAdminRole()">Remove admin role</button>
 
     <h2 class="mt-4">All Users</h2>
@@ -63,7 +63,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let user of users">
-          <td><input type="checkbox" (change)="toggleSelection(user)" /></td>
+            <td><input type="checkbox" class="checkbox" [(ngModel)]="user.isSelected" (click)="toggleSelection(user)"></td>
           <td>{{user.username}}</td>
           <td>{{user.email}}</td>
           <td>{{userService.getRole(user.role)}}</td>

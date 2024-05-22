@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light" [ngClass]="{'bg-dark': isDarkMode, 'navbar-dark': isDarkMode}">
-  <a class="navbar-brand" href="#">Personal Collection</a>
+  <a class="navbar-brand" routerLink="/dashboard">Personal Collection</a>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -8,10 +8,10 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/dashboard">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" routerLink="/dashboard">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="/collections">Collection <span class="sr-only">(current)</span></a>
+        <a class="nav-link" routerLink="/collections">Collection <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -19,8 +19,8 @@
           Account
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/signup">Signup</a>
-          <a class="dropdown-item" href="/login">Login</a>
+          <a class="dropdown-item" routerLink="/signup">Signup</a>
+          <a class="dropdown-item" routerLink="/login">Login</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" style="cursor: pointer;" (click)="logout()">Logout</a>
         </div>

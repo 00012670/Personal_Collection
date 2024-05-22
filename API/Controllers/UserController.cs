@@ -16,20 +16,12 @@ public class UserController : Controller
         _userService = userService;
     }
 
-    [HttpDelete("delete-users")]
-    public async Task<IActionResult> DeleteUsers([FromBody] List<int> userIds)
+
+    [HttpGet("users")]
+    public async Task<IActionResult> GetAllUsers()
     {
-        foreach (var id in userIds)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            _context.Users.Remove(user);
-        }
-        await _context.SaveChangesAsync();
-        return NoContent();
+        var users = await _context.Users.ToListAsync();
+        return Ok(users);
     }
 
     public class UpdateUserStatusModel
@@ -61,6 +53,25 @@ public class UserController : Controller
         public string? Role { get; set; }
     }
 
+    public class UpdateUserSelectionModel
+    {
+        [Required]
+        public bool? IsSelected { get; set; }
+    }
+
+    [HttpPut("{id}/selection")]
+    public async Task<IActionResult> SetUserSelection(int id, [FromBody] UpdateUserSelectionModel model)
+    {
+        var user = await _context.Users.FindAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        user.isSelected = model.IsSelected ?? user.isSelected;
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+
     [HttpPut("{id}/role")]
     public async Task<IActionResult> SetUserRole(int id, [FromBody] UpdateUseRoleModel model)
     {
@@ -78,10 +89,19 @@ public class UserController : Controller
         return NoContent();
     }
 
-    [HttpGet("users")]
-    public async Task<IActionResult> GetAllUsers()
+    [HttpDelete("delete-users")]
+    public async Task<IActionResult> DeleteUsers([FromBody] List<int> userIds)
     {
-        var users = await _context.Users.ToListAsync();
-        return Ok(users);
+        foreach (var id in userIds)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            _context.Users.Remove(user);
+        }
+        await _context.SaveChangesAsync();
+        return NoContent();
     }
 }

@@ -64,4 +64,9 @@ export class UserService {
     return this.http.put(`${this.baseApiUrl}/${userId}/role`, body);
   }
 
+  setUserSelection(userId: number, isSelected: boolean): Observable<any> {
+    const url = `${this.baseApiUrl}/${userId}/selection`;
+    const body = { isSelected };
+    return this.http.put(url, body);
+  }
 }

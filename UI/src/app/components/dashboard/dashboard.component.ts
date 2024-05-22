@@ -5,7 +5,7 @@ import { UserIdentityService } from 'src/app/services/user-identity.service';
 import { UserService } from 'src/app/services/user.service';
 import { combineLatest } from 'rxjs';
 import { UserOperationsService } from 'src/app/services/user-operaton.service';
-
+import { FormValidationService } from 'src/app/services/form-validation.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -26,23 +26,32 @@ export class DashboardComponent implements OnInit {
     public userService: UserService,
     private userOperations: UserOperationsService,
     private themeService: ThemeService,
+    private formValidation: FormValidationService,
   ) { }
 
-  ngOnInit(): void {
-    combineLatest([
-      this.themeService.isDarkMode(),
-      this.userIdentity.currentUser
-    ]).subscribe(([isDarkMode, user]) => {
-      this.isDarkMode = isDarkMode;
-      this.currentUser = user;
-      if (!this.currentUser) {
-        this.currentUser = { role: 'User' };
-      }
-      if (this.currentUser.role === 'Admin') {
-        this.loadAllUsers();
-      }
-    });
-  }
+ngOnInit(): void {
+  combineLatest([
+    this.themeService.isDarkMode(),
+    this.userIdentity.currentUser
+  ]).subscribe(([isDarkMode, user]) => {
+    this.isDarkMode = isDarkMode;
+    this.currentUser = user || { role: 'User' };
+    if (this.currentUser.role === 'Admin') {
+      this.loadAllUsers();
+      this.setSelectedUsers();
+    }
+  });
+}
+
+setSelectedUsers(): void {
+  this.selectedUsers = this.userOperations.getSelectedUsersState();
+  this.selectedUsers.forEach(selectedUser => {
+    const user = this.users.find(user => user.userId === selectedUser.userId);
+    if (user) {
+      user.isSelected = true;
+    }
+  });
+}
 
   loadAllUsers(): void {
     this.userService.getAllUsers().subscribe(users => {
@@ -51,41 +60,47 @@ export class DashboardComponent implements OnInit {
   }
 
   toggleSelection(user: User): void {
-    const index = this.selectedUsers.indexOf(user);
-    if (index === -1) {
-      this.selectedUsers.push(user);
-    } else {
-      this.selectedUsers.splice(index, 1);
-    }
+    this.userOperations.toggleUserSelection(user);
+    this.selectedUsers = this.userOperations.getSelectedUsers(this.users);
+    this.userOperations.storeSelectedUsersState(this.selectedUsers);
+  }
+
+  saveChanges(): void {
+    this.userOperations.updateUsersSelection(this.selectedUsers, true).subscribe();
+    this.selectedUsers = [];
   }
 
   deleteSelectedUsers(): void {
     this.userOperations.deleteUsers(this.selectedUsers).subscribe(() => {
-      this.users = this.users.filter(user => !this.selectedUsers.includes(user));
+      this.users = this.users.filter(user => !user.isSelected);
       this.selectedUsers = [];
     });
   }
 
   blockSelectedUsers(): void {
+    if (!this.hasSelectedUsers()) return;
     this.updateUserStatus(Status.Blocked);
   }
 
   unblockSelectedUsers(): void {
+    if (!this.hasSelectedUsers()) return;
     this.updateUserStatus(Status.Active);
   }
 
-  grandAdminRole(): void {
+  grantAdminRole(): void {
+    if (!this.hasSelectedUsers()) return;
     this.updateUserRole(Role.Admin);
   }
 
   removeAdminRole(): void {
+    if (!this.hasSelectedUsers()) return;
     this.updateUserRole(Role.User);
   }
 
   private updateUserStatus(status: Status): void {
     const usersToUpdate = this.selectedUsers.length > 0 ? this.selectedUsers : this.users;
     this.userOperations.updateUsersStatus(usersToUpdate, status).subscribe(() => {
-      usersToUpdate.forEach(user => user.status = status);
+      this.updateLocalUsersStatus(status);
       this.selectedUsers = [];
     });
   }
@@ -93,8 +108,30 @@ export class DashboardComponent implements OnInit {
   private updateUserRole(role: Role): void {
     const usersToUpdate = this.selectedUsers.length > 0 ? this.selectedUsers : this.users;
     this.userOperations.updateUsersRole(usersToUpdate, role).subscribe(() => {
-      usersToUpdate.forEach(user => user.role = role);
+      this.updateLocalUsersRole(role);
       this.selectedUsers = [];
+    });
+  }
+
+  private hasSelectedUsers(): boolean {
+    if (this.selectedUsers.length === 0) {
+      this.formValidation.handleError(null, 'No users selected');
+      return false;
+    }
+    return true;
+  }
+
+  private updateLocalUsersStatus(status: Status): void {
+    this.selectedUsers.forEach(user => {
+      user.status = status;
+      user.isSelected = false;
+    });
+  }
+
+  private updateLocalUsersRole(role: Role): void {
+    this.selectedUsers.forEach(user => {
+      user.role = role;
+      user.isSelected = false;
     });
   }
 }
