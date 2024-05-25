@@ -18,13 +18,13 @@ namespace API.Controllers
         [HttpGet("GetCollections")]
         public async Task<ActionResult<IEnumerable<Collection>>> GetCollections()
         {
-            return await _context.Collections.ToListAsync();
+            return await _context.Collections.Include(c => c.User).ToListAsync();
         }
 
         [HttpGet("GetCollectionsByUser/{userId}")]
         public async Task<ActionResult<IEnumerable<Collection>>> GetCollectionsByUser(int userId)
         {
-            var collections = await _context.Collections.Where(c => c.UserId == userId).ToListAsync();
+            var collections = await _context.Collections.Where(c => c.UserId == userId).Include(c => c.User).ToListAsync();
             if (!collections.Any())
             {
                 return NotFound();
@@ -42,6 +42,7 @@ namespace API.Controllers
             }
             return collection;
         }
+
         [HttpPut("EditCollection/{id}")]
         public async Task<IActionResult> EditCollection(int id, Collection collection)
         {

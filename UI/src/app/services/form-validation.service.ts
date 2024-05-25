@@ -14,7 +14,7 @@ export class FormValidationService {
   userId!: number;
   submitted = false;
   collection!: Collection;
-  
+
   constructor(
     private toast: NgToastService,
     private formBuilder: FormBuilder,
@@ -72,8 +72,10 @@ export class FormValidationService {
     }
   }
 
-  handleSuccess(message: string, router: Router, route: string): void {
-    router.navigate([route]);
+  handleSuccess(message: string, router: Router, route: string, shouldNavigate: boolean = true): void {
+    if (shouldNavigate) {
+      router.navigate([route]);
+    }
     this.toast.success({ detail: 'SUCCESS', summary: message, duration: 4000 });
   }
 

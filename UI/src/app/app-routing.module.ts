@@ -6,7 +6,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { CollectionComponent } from './components/collection/collection.component';
 import { AddCollectionComponent } from './components/collection/add-collection/add-collection.component';
 import { EditCollectionComponent } from './components/collection/edit-collection/edit-collection.component';
+import { CollectionDetailsComponent } from './components/dashboard/collection-details/collection-details.component';
 import { AuthGuard } from './guards/auth.guard';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -15,7 +17,8 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'collections', component: CollectionComponent },
   { path: 'add-collection', component: AddCollectionComponent, canActivate: [AuthGuard]},
-  { path: 'edit-collection/:id', component: EditCollectionComponent}
+  { path: 'edit-collection/:id', component: EditCollectionComponent},
+  { path: 'collection-details/:id', component: CollectionDetailsComponent}
 ];
 
 @NgModule({

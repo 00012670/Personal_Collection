@@ -1,3 +1,5 @@
+import { UserLike } from "./like.model";
+
 export interface User {
   userId: number;
   username: string;
@@ -6,6 +8,7 @@ export interface User {
   status: Status;
   role: Role;
   isSelected: boolean;
+  userLikes?: UserLike[];
 }
 
 export enum Status {

@@ -14,19 +14,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getAllUsers(): Observable<User[]> {
-    return this.http.get<{ $id: string, $values: User[] }>(`${this.baseApiUrl}/users`).pipe(
-      map(response => {
-        if (!Array.isArray(response.$values)) {
-          console.error('Expected response.$values to be an array, but got', response.$values);
-          return [];
-        }
-        return response.$values.map(user => {
-          user.role = user.role;
-          user.status = user.status;
-          return user;
-        });
-      })
-    );
+    return this.http.get<User[]>(`${this.baseApiUrl}/users`);
   }
 
   getRole(role: Role): string {

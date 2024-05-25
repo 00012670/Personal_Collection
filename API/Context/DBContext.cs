@@ -11,15 +11,14 @@ namespace API.Context
         {
             Database.EnsureCreated();
         }
-
         public DbSet<User> Users { get; set; }
-        public DbSet<Category> Categories { get; set; }
         public DbSet<Collection> Collections { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<CustomField> CustomFields { get; set; }
         public DbSet<ItemCustomField> ItemCustomFields { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<ItemTag> ItemTags { get; set; }
+        public DbSet<UserLike> UserLikes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(entity =>
@@ -34,16 +33,30 @@ namespace API.Context
            {
                entity.HasKey(e => e.CollectionId);
                entity.HasOne(e => e.User).WithMany(u => u.Collections).HasForeignKey(e => e.UserId);
-               //  entity.HasOne(e => e.Category).WithMany(c => c.Collection).HasForeignKey(e => e.CategoryID);
-               //    entity.HasMany(e => e.Items).WithOne(i => i.Collection).HasForeignKey(i => i.CollectionID);
-               //    entity.HasMany(e => e.CustomFields).WithOne(f => f.Collection).HasForeignKey(f => f.CollectionID);
+               entity.HasMany(e => e.Items).WithOne(i => i.Collection).HasForeignKey(i => i.CollectionID);
+               entity.HasMany(e => e.CustomFields).WithOne(f => f.Collection).HasForeignKey(f => f.CollectionId);
            });
+            modelBuilder.Entity<UserLike>()
+            .HasKey(ul => new { ul.UserId, ul.CollectionId });
+
+            modelBuilder.Entity<UserLike>()
+                .HasOne(ul => ul.User)
+                .WithMany(u => u.UserLikes)
+                .HasForeignKey(ul => ul.UserId)
+                .OnDelete(DeleteBehavior.NoAction); 
+
+            modelBuilder.Entity<UserLike>()
+                .HasOne(ul => ul.Collection)
+                .WithMany(c => c.UserLikes)
+                .HasForeignKey(ul => ul.CollectionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Item>(entity =>
             {
                 entity.HasKey(e => e.ItemId);
-                // entity.HasOne(e => e.Collection).WithMany(c => c.Items).HasForeignKey(e => e.CollectionID);
+                entity.HasOne(e => e.Collection).WithMany(c => c.Items).HasForeignKey(e => e.CollectionID);
                 entity.HasMany(e => e.ItemCustomFields).WithOne(icf => icf.Item).HasForeignKey(icf => icf.ItemId);
-                entity.HasMany(e => e.Tags).WithOne(it => it.Item).HasForeignKey(it => it.ItemId);
+                // entity.HasMany(e => e.Tags).WithOne(it => it.Item).HasForeignKey(it => it.ItemId);
             });
 
             modelBuilder.Entity<ItemCustomField>(entity =>
@@ -52,11 +65,11 @@ namespace API.Context
                  entity.HasOne(e => e.Item)
                      .WithMany(i => i.ItemCustomFields)
                      .HasForeignKey(e => e.ItemId)
-                     .OnDelete(DeleteBehavior.Cascade); // Keep cascade delete on Item -> ItemCustomField relationship
+                     .OnDelete(DeleteBehavior.Cascade);
                  entity.HasOne(e => e.CustomField)
                      .WithMany(cf => cf.ItemCustomFields)
                      .HasForeignKey(e => e.CustomFieldId)
-                     .OnDelete(DeleteBehavior.NoAction); // Change delete behavior to NoAction on CustomField -> ItemCustomField relationship
+                     .OnDelete(DeleteBehavior.NoAction);
              });
 
             modelBuilder.Entity<Tag>(entity =>
@@ -68,14 +81,7 @@ namespace API.Context
             modelBuilder.Entity<ItemTag>(entity =>
             {
                 entity.HasKey(e => new { e.ItemId, e.TagId });
-                entity.HasOne(e => e.Item).WithMany(i => i.Tags).HasForeignKey(e => e.ItemId);
                 entity.HasOne(e => e.Tag).WithMany(t => t.ItemTags).HasForeignKey(e => e.TagId);
-            });
-
-            modelBuilder.Entity<Category>(entity =>
-            {
-                entity.HasKey(e => e.CategoryId);
-                entity.Property(e => e.CategoryId).ValueGeneratedOnAdd();
             });
         }
     }

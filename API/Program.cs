@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +42,16 @@ builder
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers();
+
+builder.Services.AddControllers()
+.AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+// .AddJsonOptions(options =>
+// {
+//     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+// });
+);
+
 
 builder.Services.AddSwaggerGen();
 

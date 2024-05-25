@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
 import { CategoryOptions, Collection } from 'src/app/models/collection.model';
 import { Role } from 'src/app/models/user.model';
 import { CollectionService } from 'src/app/services/collection.service';
@@ -40,18 +39,14 @@ export class CollectionComponent {
   }
 
   getCollections(): void {
-    let collectionObservable;
     if (this.role === Role.Admin.toString()) {
-      collectionObservable = this.collectionService.getCollections();
+      this.collectionService.getCollections().subscribe(collections => {
+        this.collectionList = collections;
+      });
     } else if (this.role === Role.User.toString() && this.userId !== null) {
-      collectionObservable = this.collectionService.getCollectionsByUser(this.userId);
+      this.collectionService.getCollectionsByUser(this.userId).subscribe(collections => {
+        this.collectionList = collections;
+      });
     }
-    this.subscribeToCollections(collectionObservable);
-  }
-
-  subscribeToCollections(collectionObservable: Observable<Collection[]> | undefined): void {
-    collectionObservable?.subscribe(collections => {
-      this.collectionList = collections;
-    });
   }
 }

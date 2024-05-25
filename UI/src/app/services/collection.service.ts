@@ -20,30 +20,23 @@ export class CollectionService {
       [CollectionCategory.Coins]: 'Coins',
       [CollectionCategory.Art]: 'Art',
       [CollectionCategory.Antiques]: 'Antiques',
-      [CollectionCategory.Toys]: 'Toys',
       [CollectionCategory.Memorabilia]: 'Memorabilia',
-      [CollectionCategory.Plants]: 'Plants',
       [CollectionCategory.Photographs]: 'Photographs',
-      [CollectionCategory.MusicalInstruments]: 'Musical Instruments',
       [CollectionCategory.Other]: 'Other'
     };
     return categories[category] || '';
   }
 
   getCollections(): Observable<Collection[]> {
-    return this.http.get(`${this.baseApiUrl}/Collections/GetCollections`).pipe(
-      map((response: any) => response.$values)
-    );
+    return this.http.get<Collection[]>(`${this.baseApiUrl}/Collections/GetCollections`);
   }
 
   getCollectionsByUser(userId: number): Observable<Collection[]> {
-    return this.http.get<Collection[]>(`${this.baseApiUrl}/Collections/GetCollectionsByUser/${userId}`).pipe(
-      map((response: any) => response.$values)
-    );
+    return this.http.get<Collection[]>(`${this.baseApiUrl}/Collections/GetCollectionsByUser/${userId}`);
   }
 
-  getCollection(id: number): Observable<any> {
-    return this.http.get(`${this.baseApiUrl}/Collections/GetCollection/${id}`);
+  getCollection(collectionId: number): Observable<any> {
+    return this.http.get(`${this.baseApiUrl}/Collections/GetCollection/${collectionId}`);
   }
 
   createCollection(collection: any): Observable<any> {
@@ -57,5 +50,4 @@ export class CollectionService {
   deleteCollection(id: number): Observable<any> {
     return this.http.delete(`${this.baseApiUrl}/Collections/DeleteCollection/${id}`);
   }
-
 }

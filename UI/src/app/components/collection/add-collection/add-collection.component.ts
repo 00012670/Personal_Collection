@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { CategoryOptions, Collection, CollectionCategory } from 'src/app/models/collection.model';
+import { CategoryOptions, Collection } from 'src/app/models/collection.model';
 import { CollectionService } from 'src/app/services/collection.service';
 import { UserIdentityService } from 'src/app/services/user-identity.service';
 import { FormValidationService } from 'src/app/services/form-validation.service';
@@ -17,6 +17,7 @@ export class AddCollectionComponent {
   submited = false;
   collection!: Collection;
   categoryOptions = CategoryOptions;
+  collectionId!: number;
 
   constructor(
     public collectionService: CollectionService,
@@ -36,9 +37,10 @@ export class AddCollectionComponent {
   createCollection(): void {
     this.submited = true;
     this.collection.userId = this.userId;
-    this.formValidation.submitForm(this.collectionForm, this.collection, (body) => this.collectionService.createCollection(body))
+    this.formValidation.submitForm(this.collectionForm, this.collection, (body) =>
+      this.collectionService.createCollection(body))
     .subscribe(
-      () => this.formValidation.handleSuccess('Collection added successfully', this.router, 'collections'),
+      () => this.formValidation.handleSuccess('Collection added successfully', this.router, '/collections'),
       (error) => this.formValidation.handleError(error, 'Error adding collection')
     );
   }

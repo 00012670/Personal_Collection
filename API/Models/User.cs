@@ -9,7 +9,7 @@ namespace API.Models
         [Required]
         [MaxLength(50)]
         public string Username { get; set; } = string.Empty;
-        
+
         [Required]
         [EmailAddress]
         [MaxLength(100)]
@@ -21,6 +21,7 @@ namespace API.Models
         public Status Status { get; set; } = Status.Active;
         public Role Role { get; set; } = Role.User;
         public List<Collection>? Collections { get; set; }
+        public ICollection<UserLike>? UserLikes { get; set; }
     }
 
     public enum Status

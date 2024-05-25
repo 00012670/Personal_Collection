@@ -70,7 +70,6 @@ export class UserIdentityService {
 
   decodeToken(token: string) {
     const decodedToken = this.jwtHelper.decodeToken(token);
-    console.log(decodedToken);
     return decodedToken;
   }
 

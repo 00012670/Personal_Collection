@@ -9,7 +9,7 @@ export interface Item {
   collection?: Collection;
   customFields?: CustomField[];
   itemCustomFields?: ItemCustomField[];
-  tags?: ItemTag[];
+  //tags?: ItemTag[];
 }
 
 export interface ItemCustomField {

@@ -1,4 +1,3 @@
-import { Category } from "./category.model";
 import { CustomField } from "./custom-field.model";
 import { Item } from "./item.model";
 import { User } from "./user.model";
@@ -10,8 +9,8 @@ export interface Collection {
   userId: number;
   user?: User;
   category: CollectionCategory;
-  // customFields?: CustomField[];
-  // items?: Item[];
+  customFields?: CustomField[];
+  items?: Item[];
 }
 
 export enum CollectionCategory
@@ -21,12 +20,9 @@ export enum CollectionCategory
   Coins = 2,
   Art = 3,
   Antiques = 4,
-  Toys = 5,
-  Memorabilia = 6,
-  Plants = 7,
-  Photographs = 8,
-  MusicalInstruments = 9,
-  Other = 10
+  Memorabilia = 5,
+  Photographs = 6,
+  Other = 7
 }
 
 export const CategoryOptions: CollectionCategory[] = [
@@ -35,11 +31,8 @@ export const CategoryOptions: CollectionCategory[] = [
   CollectionCategory.Coins,
   CollectionCategory.Art,
   CollectionCategory.Antiques,
-  CollectionCategory.Toys,
   CollectionCategory.Memorabilia,
-  CollectionCategory.Plants,
   CollectionCategory.Photographs,
-  CollectionCategory.MusicalInstruments,
   CollectionCategory.Other
 ];
 

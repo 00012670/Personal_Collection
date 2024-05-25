@@ -5,7 +5,7 @@
         <th scope="col">Name</th>
         <th scope="col">Description</th>
         <th scope="col">Category</th>
-        <th scope="col">Action</th>
+        <th scope="col">Author</th>
       </tr>
     </thead>
     <tbody>
@@ -13,9 +13,7 @@
         <td>{{collection.name}}</td>
         <td>{{collection.description}}</td>
         <td>{{collectionService.getCategory(collection.category)}}</td>
-        <td>
-          <p class="pointer" [routerLink]="['/edit-collection', collection.collectionId]">Veiw</p>
-        </td>
+        <td><p class="pointer" [routerLink]="['/collection-details', collection.collectionId]">{{collection.user?.username}}</p></td>
       </tr>
     </tbody>
   </table>

@@ -21,6 +21,9 @@ import { UserDashboardComponent } from './components/dashboard/user-dashboard/us
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatIconModule } from '@angular/material/icon';
 import { ThemeToggleComponent } from './components/theme-toggle/theme-toggle.component';
+import { CustomField } from './models/custom-field.model';
+import { CustomFieldComponent } from './components/collection/custom-field/custom-field.component';
+import { CollectionDetailsComponent } from './components/dashboard/collection-details/collection-details.component';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -36,7 +39,9 @@ export function tokenGetter() {
     AddCollectionComponent,
     EditCollectionComponent,
     UserDashboardComponent,
-    ThemeToggleComponent
+    ThemeToggleComponent,
+    CustomFieldComponent,
+    CollectionDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -49,6 +54,7 @@ export function tokenGetter() {
     NgToastModule,
     CommonModule,
     MatIconModule,
+    FormsModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
@@ -56,7 +62,6 @@ export function tokenGetter() {
         disallowedRoutes: ["http://localhost:5176/login"]
       },
     }),
-
   ],
   providers: [
     provideAnimationsAsync('noop')

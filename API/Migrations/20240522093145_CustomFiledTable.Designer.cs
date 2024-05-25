@@ -4,6 +4,7 @@ using API.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20240522093145_CustomFiledTable")]
+    partial class CustomFiledTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,6 +68,22 @@ namespace API.Migrations
                     b.ToTable("Users", "Users");
                 });
 
+            modelBuilder.Entity("Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories", "Users");
+                });
+
             modelBuilder.Entity("Collection", b =>
                 {
                     b.Property<int>("CollectionId")
@@ -76,11 +95,11 @@ namespace API.Migrations
                     b.Property<int>("Category")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Likes")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -89,6 +108,8 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CollectionId");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("UserId");
 
@@ -194,23 +215,12 @@ namespace API.Migrations
                     b.ToTable("Tags", "Users");
                 });
 
-            modelBuilder.Entity("UserLike", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CollectionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "CollectionId");
-
-                    b.HasIndex("CollectionId");
-
-                    b.ToTable("UserLikes", "Users");
-                });
-
             modelBuilder.Entity("Collection", b =>
                 {
+                    b.HasOne("Category", null)
+                        .WithMany("Collection")
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("API.Models.User", "User")
                         .WithMany("Collections")
                         .HasForeignKey("UserId")
@@ -284,30 +294,14 @@ namespace API.Migrations
                     b.Navigation("Tag");
                 });
 
-            modelBuilder.Entity("UserLike", b =>
-                {
-                    b.HasOne("Collection", "Collection")
-                        .WithMany("UserLikes")
-                        .HasForeignKey("CollectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.User", "User")
-                        .WithMany("UserLikes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Collection");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("API.Models.User", b =>
                 {
                     b.Navigation("Collections");
+                });
 
-                    b.Navigation("UserLikes");
+            modelBuilder.Entity("Category", b =>
+                {
+                    b.Navigation("Collection");
                 });
 
             modelBuilder.Entity("Collection", b =>
@@ -315,8 +309,6 @@ namespace API.Migrations
                     b.Navigation("CustomFields");
 
                     b.Navigation("Items");
-
-                    b.Navigation("UserLikes");
                 });
 
             modelBuilder.Entity("CustomField", b =>

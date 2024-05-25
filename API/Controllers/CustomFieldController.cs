@@ -16,25 +16,41 @@ namespace API.Controllers
             _context = context;
         }
 
+        [HttpGet("GetCustomFields")]
+        public async Task<ActionResult<IEnumerable<CustomField>>> GetCustomFields()
+        {
+            return await _context.CustomFields.ToListAsync();
+        }
+
+        [HttpGet("GetCustomFields/{collectionId}")]
+        public async Task<ActionResult<IEnumerable<CustomField>>> GetCustomFields(int collectionId)
+        {
+            return await _context.CustomFields.Where(c => c.CollectionId == collectionId).ToListAsync();
+        }
+
         [HttpGet("GetCustomField{id}")]
         public async Task<ActionResult<CustomField>> GetCustomField(int id)
         {
             var customField = await _context.CustomFields.FindAsync(id);
-
             if (customField == null)
             {
                 return NotFound();
             }
-
             return customField;
         }
 
         [HttpPost("AddCustomField/{collectionId}")]
-        public async Task<ActionResult<CustomField>> CreateCustomField(CustomField customField)
+        public async Task<ActionResult<CustomField>> CreateCustomField(int collectionId, CustomField customField)
         {
+            var collection = await _context.Collections.FirstOrDefaultAsync(c => c.CollectionId == collectionId);
+            if (collection == null)
+            {
+                return NotFound("Collection not found");
+            }
+            customField.CollectionId = collectionId;
+            customField.Collection = collection;
             _context.CustomFields.Add(customField);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetCustomField", new { id = customField.CustomFieldId }, customField);
         }
 
@@ -45,9 +61,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-
             _context.Entry(customField).State = EntityState.Modified;
-
             try
             {
                 await _context.SaveChangesAsync();
@@ -63,7 +77,6 @@ namespace API.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
 
@@ -75,13 +88,10 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-
             _context.CustomFields.Remove(customField);
             await _context.SaveChangesAsync();
-
             return NoContent();
         }
-
         private bool CustomFieldExists(int id)
         {
             return _context.CustomFields.Any(e => e.CustomFieldId == id);

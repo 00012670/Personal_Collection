@@ -10,7 +10,6 @@ namespace API.Controllers
     {
         private readonly UserService _userService;
         private readonly AuthenticationService _authService;
-
         public IdentityController(UserService userService, AuthenticationService authService)
         {
             _userService = userService;

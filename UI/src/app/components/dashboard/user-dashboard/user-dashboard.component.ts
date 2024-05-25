@@ -22,9 +22,6 @@ export class UserDashboardComponent {
     this.collectionService.getCollections().subscribe(collections => {
       this.collectionList = collections;
     });
-    this.collectionService.getCollections().subscribe(collections => {
-      this.collectionList = collections;
-    });
     this.themeService.isDarkMode().subscribe((isDarkMode: boolean) => {
       this.isDarkMode = isDarkMode;
     });

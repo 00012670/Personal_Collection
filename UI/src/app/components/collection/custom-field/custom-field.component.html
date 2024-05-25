@@ -1,0 +1,62 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+      <!-- Integer fields -->
+      <div class="form-group mt-3" *ngFor="let i of [1, 2, 3]">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" [id]="'integerField' + i" [formControlName]="'integerField' + i">
+          <label class="form-check-label" [for]="'integerField' + i">
+            Include integer field {{i}}
+          </label>
+        </div>
+        <input type="number" step="1" class="form-control mt-2" [id]="'integerFieldName' + i" [formControlName]="'integerFieldName' + i"
+          [placeholder]="'Enter name for integer field ' + i" [disabled]="!collectionForm.get('integerField' + i).value">
+      </div>
+      <!-- String fields -->
+      <div class="form-group mt-3" *ngFor="let i of [1, 2, 3]">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" [id]="'stringField' + i" [formControlName]="'stringField' + i">
+          <label class="form-check-label" [for]="'stringField' + i">
+            Include string field {{i}}
+          </label>
+        </div>
+        <label [for]="'stringFieldName' + i">String Field Name {{i}}</label>
+        <input type="text" class="form-control mt-2" [id]="'stringFieldName' + i" [formControlName]="'stringFieldName' + i"
+          [placeholder]="'Enter name for string field ' + i" [disabled]="!collectionForm.get('stringField' + i).value">
+      </div>
+      <!-- Multiline text fields -->
+      <div class="form-group mt-3" *ngFor="let i of [1, 2, 3]">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" [id]="'multilineTextField' + i" [formControlName]="'multilineTextField' + i">
+          <label class="form-check-label" [for]="'multilineTextField' + i">
+            Include multiline text field {{i}}
+          </label>
+        </div>
+        <textarea class="form-control mt-2" [id]="'multilineTextFieldName' + i" [formControlName]="'multilineTextFieldName' + i"
+          [placeholder]="'Enter name for multiline text field ' + i" [disabled]="!collectionForm.get('multilineTextField' + i).value"></textarea>
+      </div>
+      <!-- Boolean fields -->
+      <div class="form-group mt-3" *ngFor="let i of [1, 2, 3]">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" [id]="'booleanField' + i" [formControlName]="'booleanField' + i">
+          <label class="form-check-label" [for]="'booleanField' + i">
+            Include boolean field {{i}}
+          </label>
+        </div>
+        <input class="form-check-input" type="checkbox" [id]="'booleanFieldName' + i" [formControlName]="'booleanFieldName' + i"
+          [disabled]="!collectionForm.get('booleanField' + i).value">
+      </div>
+      <!-- Date fields -->
+      <div class="form-group mt-3" *ngFor="let i of [1, 2, 3]">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" [id]="'dateField' + i" [formControlName]="'dateField' + i">
+          <label class="form-check-label" [for]="'dateField' + i">
+            Include date field {{i}}
+          </label>
+        </div>
+        <input type="date" class="form-control mt-2" [id]="'dateFieldName' + i" [formControlName]="'dateFieldName' + i"
+          [placeholder]="'Enter name for date field ' + i" [disabled]="!collectionForm.get('dateField' + i).value">
+      </div>
+    </div>
+  </div>
+</div>

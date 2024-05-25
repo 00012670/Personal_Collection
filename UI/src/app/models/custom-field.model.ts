@@ -11,9 +11,17 @@ export interface CustomField {
 }
 
 export enum FieldType {
-  String,
-  Int,
-  Text,
-  Boolean,
-  Date
+  String = 0,
+  Int = 1,
+  Text = 2,
+  Boolean = 3,
+  Date = 4
 }
+
+export const TypeOptions: FieldType[] = [
+  FieldType.String,
+  FieldType.Int,
+  FieldType.Text,
+  FieldType.Boolean,
+  FieldType.Date
+];
