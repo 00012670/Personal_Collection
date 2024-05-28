@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { CategoryOptions, Collection } from 'src/app/models/collection.model';
 import { CollectionService } from 'src/app/services/collection.service';
-import { UserIdentityService } from 'src/app/services/user-identity.service';
 import { FormValidationService } from 'src/app/services/form-validation.service';
 import { KeyInputService } from 'src/app/services/key-input.service';
 
@@ -23,47 +22,41 @@ export class EditCollectionComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public collectionService: CollectionService,
-    private userIdentityService: UserIdentityService,
     private formValidation: FormValidationService,
     private router: Router,
-    private keyInputService: KeyInputService
   ) {
     this.collectionForm = this.formValidation.collectionValidator({} as Collection);
   }
 
   ngOnInit(): void {
-    this.userId = this.userIdentityService.getUserId() ?? 0;
+    this.subscribeToRouteParams();
+  }
+
+  subscribeToRouteParams(): void {
     this.route.paramMap.subscribe({
       next: (params) => {
         const id = params.get('id');
         if (id) {
-          this.collectionService.getCollection(+id)
-            .subscribe({
-              next: (response) => {
-                this.collectionDetails = response;
-                this.collectionId = response.collectionId;
-                this.collectionForm = this.formValidation.collectionValidator(this.collectionDetails);
-              }
-            })
+          this.fetchCollectionDetails(+id);
         }
       }
     });
   }
 
-  // updateCollection(event?: Event) {
-  //   if (event) {
-  //     event.preventDefault();
-  //   }
-  //   this.submited = true;
-  //   if (this.collectionForm.valid) {
-  //     this.formValidation.submitForm(this.collectionForm, this.collectionDetails,
-  //       (body) => this.collectionService.editCollection(this.collectionDetails.collectionId, body))
-  //       .subscribe({
-  //         next: () => this.formValidation.handleSuccess('Collection updated successfully', this.router, 'collections'),
-  //         error: (error) => this.formValidation.handleError(error, 'Error updating collection')
-  //       });
-  //   }
-  // }
+  fetchCollectionDetails(id: number): void {
+    this.collectionService.getCollection(id)
+      .subscribe({
+        next: (response) => {
+          this.setCollectionDetails(response);
+        }
+      });
+  }
+
+  setCollectionDetails(collection: Collection): void {
+    this.collectionDetails = collection;
+    this.collectionId = collection.collectionId;
+    this.collectionForm = this.formValidation.collectionValidator(this.collectionDetails);
+  }
 
   updateCollection() {
     this.submited = true;

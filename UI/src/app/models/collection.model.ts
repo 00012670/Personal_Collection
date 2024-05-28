@@ -1,4 +1,3 @@
-import { CustomField } from "./custom-field.model";
 import { Item } from "./item.model";
 import { User } from "./user.model";
 
@@ -9,7 +8,6 @@ export interface Collection {
   userId: number;
   user?: User;
   category: CollectionCategory;
-  customFields?: CustomField[];
   items?: Item[];
 }
 

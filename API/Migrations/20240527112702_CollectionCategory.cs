@@ -5,27 +5,27 @@
 namespace API.Migrations
 {
     /// <inheritdoc />
-    public partial class isSelected : Migration
+    public partial class CollectionCategory : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "isSelected",
+            migrationBuilder.AddColumn<int>(
+                name: "Category",
                 schema: "Users",
-                table: "Users",
-                type: "bit",
+                table: "Collections",
+                type: "int",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: 0);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "isSelected",
+                name: "Category",
                 schema: "Users",
-                table: "Users");
+                table: "Collections");
         }
     }
 }

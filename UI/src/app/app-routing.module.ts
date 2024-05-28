@@ -8,6 +8,9 @@ import { AddCollectionComponent } from './components/collection/add-collection/a
 import { EditCollectionComponent } from './components/collection/edit-collection/edit-collection.component';
 import { CollectionDetailsComponent } from './components/dashboard/collection-details/collection-details.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ItemComponent } from './components/item/item.component';
+import { AddItemComponent } from './components/item/add-item/add-item.component';
+import { EditItemComponent } from './components/item/edit-item/edit-item.component';
 
 
 const routes: Routes = [
@@ -18,7 +21,10 @@ const routes: Routes = [
   { path: 'collections', component: CollectionComponent },
   { path: 'add-collection', component: AddCollectionComponent, canActivate: [AuthGuard]},
   { path: 'edit-collection/:id', component: EditCollectionComponent},
-  { path: 'collection-details/:id', component: CollectionDetailsComponent}
+  { path: 'collection-details/:id', component: CollectionDetailsComponent},
+  { path: 'items/:collectionId', component: ItemComponent},
+  { path: 'add-item/:collectionId', component: AddItemComponent},
+  { path: 'edit-item/:id', component: EditItemComponent},
 ];
 
 @NgModule({

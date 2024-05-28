@@ -13,7 +13,7 @@
         <td>{{collection.name}}</td>
         <td>{{collection.description}}</td>
         <td>{{collectionService.getCategory(collection.category)}}</td>
-        <td><p class="pointer" [routerLink]="['/collection-details', collection.collectionId]">{{collection.user?.username}}</p></td>
+        <td><p class="pointer" [routerLink]="['/items', collection.collectionId]">{{collection.user?.username}}</p></td>
       </tr>
     </tbody>
   </table>

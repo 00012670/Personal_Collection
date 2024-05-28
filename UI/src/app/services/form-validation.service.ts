@@ -5,6 +5,7 @@ import { NgToastService } from 'ng-angular-popup';
 import { Collection } from '../models/collection.model';
 import { Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { Item } from '../models/item.model';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +54,22 @@ export class FormValidationService {
     };
   }
 
+  itemValidator(Item: Item): FormGroup {
+    return this.formBuilder.group({
+      name: [Item.name, Validators.required],
+      description: [Item.description, Validators.required],
+    });
+  }
+
+  getItemFormValues(form: FormGroup, item: Item) {
+    return {
+      itemId: item.itemId,
+      collectionId: item.collectionId,
+      name: form.get('name')?.value,
+      description: form.get('description')?.value,
+    };
+  }
+
   validateForm(form: FormGroup) {
     if (form.valid) {
       return true;
@@ -72,9 +89,18 @@ export class FormValidationService {
     }
   }
 
-  handleSuccess(message: string, router: Router, route: string, shouldNavigate: boolean = true): void {
+  submitItemForm(form: FormGroup, item: Item, collectionId: number, submitAction: (body: any, collectionId: number) => Observable<any>) {
+    if (this.validateForm(form)) {
+      const requestBody = this.getItemFormValues(form, item);
+      return submitAction(requestBody, collectionId);
+    } else {
+      return throwError('Form is invalid');
+    }
+  }
+
+  handleSuccess(message: string, router: Router, route: string, routeParams: any[] =[], shouldNavigate: boolean = true): void {
     if (shouldNavigate) {
-      router.navigate([route]);
+      router.navigate([route, ...routeParams]);
     }
     this.toast.success({ detail: 'SUCCESS', summary: message, duration: 4000 });
   }

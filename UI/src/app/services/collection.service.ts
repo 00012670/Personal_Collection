@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, tap, } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Collection, CollectionCategory } from '../models/collection.model';
 

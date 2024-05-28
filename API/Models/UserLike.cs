@@ -7,8 +7,8 @@ public class UserLike
 
     [ForeignKey("UserId")]
     public User? User { get; set; }
-    public int CollectionId { get; set; }
+    public int ItemId { get; set; }
 
-    [ForeignKey("CollectionId")]
-    public Collection? Collection { get; set; }
+    [ForeignKey("ItemId")]
+    public Item? Item { get; set; }
 }
