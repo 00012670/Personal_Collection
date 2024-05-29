@@ -36,15 +36,11 @@ export class ItemComponent {
   ) { }
 
   ngOnInit(): void {
-    this.setLoggedInUserId();
+    this.loggedInUserId = this.userIdentityService.getUserId() ?? 0;
     this.SetThemeMode();
     this.RouteParams();
   }
-
-  setLoggedInUserId(): void {
-    this.loggedInUserId = this.userIdentityService.getUserId() ?? 0;
-  }
-
+  
   SetThemeMode(): void {
     this.themeService.isDarkMode().subscribe((isDarkMode: boolean) => {
       this.isDarkMode = isDarkMode;

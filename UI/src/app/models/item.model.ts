@@ -6,4 +6,6 @@ export interface Item {
   description?: string;
   collectionId: number;
   collection?: Collection;
+  likes?: number;
+  hasLiked?: boolean;
 }

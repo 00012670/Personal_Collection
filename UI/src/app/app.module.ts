@@ -21,11 +21,11 @@ import { UserDashboardComponent } from './components/dashboard/user-dashboard/us
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatIconModule } from '@angular/material/icon';
 import { ThemeToggleComponent } from './components/theme-toggle/theme-toggle.component';
-import { CollectionDetailsComponent } from './components/dashboard/collection-details/collection-details.component';
 import { ItemComponent } from './components/item/item.component';
 import { AddItemComponent } from './components/item/add-item/add-item.component';
 import { EditItemComponent } from './components/item/edit-item/edit-item.component';
 import { ItemDetailsComponent } from './components/item/item-details/item-details.component';
+import { CommentComponent } from './components/comment/comment.component';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -42,11 +42,11 @@ export function tokenGetter() {
     EditCollectionComponent,
     UserDashboardComponent,
     ThemeToggleComponent,
-    CollectionDetailsComponent,
     ItemComponent,
     AddItemComponent,
     EditItemComponent,
-    ItemDetailsComponent
+    ItemDetailsComponent,
+    CommentComponent
   ],
   imports: [
     BrowserModule,

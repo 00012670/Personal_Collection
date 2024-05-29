@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row justify-content-center mt-3">
+    <div class="col-12 col-md-6 card p-4">
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label class="form-label detail-label mt-3 mb-3" for="review">Your Comment</label>
+          <textarea [(ngModel)]="newCommentText" name="text" class="form-control dark-input" id="review"
+            rows="3"></textarea>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+          <button type="submit" class="btn btn-primary mt-4">Add Comment</button>
+        </div>
+      </form>
+      <div *ngFor="let comment of comments" class="review-card mb-3">
+        <br>
+        <p class="font-weight-bold mb-1">Username: {{ comment.user?.username }}</p>
+        <p class="font-weight-bold mb-1">Comment: {{ comment.text }}</p>
+      </div>
+    </div>
+  </div>
+</div>

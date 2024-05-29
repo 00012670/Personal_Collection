@@ -7,5 +7,7 @@ public class Item
     public Collection? Collection { get; set; }
     public int Likes { get; set; }
     public List<UserLike>? UserLikes { get; set; }
+    public ICollection<Comment>? Comments { get; set; }
+
 }
 

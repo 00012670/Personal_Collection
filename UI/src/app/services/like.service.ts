@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../environments/environment';
+import { UserIdentityService } from './user-identity.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,22 +11,27 @@ import { environment } from '../environments/environment';
 export class LikeService {
 
   baseApiUrl: string = environment.baseApi
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private userIdentityService: UserIdentityService) { }
 
-
-  getLikes(collectionId: number): Observable<number> {
-    return this.http.get<number>(`${this.baseApiUrl}/Likes/GetLikes/${collectionId}`);
+  getCurrentUserId(): any {
+    return this.userIdentityService.getUserId();
+  }
+  getLikes(itemId: number): Observable<number> {
+    return this.http.get<number>(`${this.baseApiUrl}/Likes/GetLikes/${itemId}`);
   }
 
-  hasLiked(userId: number, collectionId: number): Observable<boolean> {
-    return this.http.get<boolean>(`${this.baseApiUrl}/Likes/HasLiked/${userId}/${collectionId}`);
+  hasLiked(userId: number, itemId: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseApiUrl}/Likes/HasLiked/${userId}/${itemId}`);
   }
 
-  addLike(userId: number, collectionId: number): Observable<any> {
-    return this.http.post<any>(`${this.baseApiUrl}/Likes/AddLike/${userId}/${collectionId}`, {});
+
+  addLike(itemId: number): Observable<any> {
+    const userId = this.getCurrentUserId();
+      return this.http.post<any>(`${this.baseApiUrl}/Likes/AddLike/${userId}/${itemId}`, {});
   }
 
-  deleteLike(userId: number, collectionId: number): Observable<any> {
-    return this.http.delete<any>(`${this.baseApiUrl}/Likes/DeleteLike/${userId}/${collectionId}`);
+  deleteLike(itemId: number): Observable<any> {
+    const userId = this.getCurrentUserId();
+      return this.http.delete<any>(`${this.baseApiUrl}/Likes/DeleteLike/${userId}/${itemId}`);
   }
 }

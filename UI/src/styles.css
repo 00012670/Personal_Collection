@@ -35,6 +35,13 @@
   color: rgb(151, 151, 151);
 }
 
+.dark-theme textarea {
+  background-color: #0000;
+  border-color: rgb(118, 118, 118);
+  color: rgb(151, 151, 151);
+}
+
+
 .dark-theme .collection {
   border-color: rgb(118, 118, 118);
   color: #cdd2e6;
@@ -99,6 +106,8 @@ a:hover {
 .pointer {
   cursor: pointer;
   color: #8989ff;
+  text-decoration: underline;
+  font-size: medium;
 }
 
 .checkbox {

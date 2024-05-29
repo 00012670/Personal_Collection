@@ -5,7 +5,6 @@ import { Item } from 'src/app/models/item.model';
 import { CollectionService } from 'src/app/services/collection.service';
 import { FormValidationService } from 'src/app/services/form-validation.service';
 import { ItemService } from 'src/app/services/item.service';
-import { UserIdentityService } from 'src/app/services/user-identity.service';
 
 @Component({
   selector: 'app-add-item',
@@ -22,7 +21,6 @@ export class AddItemComponent {
   constructor(
     private itemService: ItemService,
     public collectionService: CollectionService,
-    private userIdentityService: UserIdentityService,
     private formValidation: FormValidationService,
     private router: Router,
     private route: ActivatedRoute

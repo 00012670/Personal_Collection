@@ -15,6 +15,7 @@ namespace API.Context
         public DbSet<Collection> Collections { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<UserLike> UserLikes { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(entity =>
@@ -51,6 +52,19 @@ namespace API.Context
                 entity.HasKey(e => e.ItemId);
                 entity.HasOne(e => e.Collection).WithMany(c => c.Items).HasForeignKey(e => e.CollectionId);
             });
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.User)
+                .WithMany(u => u.Comments)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Item)
+                .WithMany(i => i.Comments)
+                .HasForeignKey(c => c.ItemId);
         }
     }
 }
+

@@ -22,6 +22,8 @@ namespace API.Models
         public Role Role { get; set; } = Role.User;
         public List<Collection>? Collections { get; set; }
         public ICollection<UserLike>? UserLikes { get; set; }
+        public ICollection<Comment>? Comments { get; set; }
+
     }
 
     public enum Status
