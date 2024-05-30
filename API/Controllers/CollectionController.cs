@@ -50,8 +50,6 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-
-            // Check if the user exists
             var userExists = await _context.Users.AnyAsync(u => u.UserId == collection.UserId);
             if (!userExists)
             {

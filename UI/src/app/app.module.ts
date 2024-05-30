@@ -18,7 +18,6 @@ import { AddCollectionComponent } from './components/collection/add-collection/a
 import { EditCollectionComponent } from './components/collection/edit-collection/edit-collection.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { UserDashboardComponent } from './components/dashboard/user-dashboard/user-dashboard.component';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatIconModule } from '@angular/material/icon';
 import { ThemeToggleComponent } from './components/theme-toggle/theme-toggle.component';
 import { ItemComponent } from './components/item/item.component';
@@ -69,7 +68,6 @@ export function tokenGetter() {
     }),
   ],
   providers: [
-    provideAnimationsAsync('noop')
   ],
   bootstrap: [AppComponent]
 })
