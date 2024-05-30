@@ -6,7 +6,7 @@ import { Collection } from '../models/collection.model';
 import { Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { Item } from '../models/item.model';
-
+import { TranslateService } from '@ngx-translate/core';
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +19,7 @@ export class FormValidationService {
   constructor(
     private toast: NgToastService,
     private formBuilder: FormBuilder,
+    private translate: TranslateService
   ) { }
 
   SignupValidator() {
@@ -75,7 +76,7 @@ export class FormValidationService {
       return true;
     } else {
       ValidateForm.validateAllFormFileds(form);
-      this.toast.error({ detail: "ERROR", summary: "Your form is invalid", duration: 5000 });
+      this.toast.error({ detail: "ERROR", summary: this.translate.instant('Your form is invalid'), duration: 5000 });
       return false;
     }
   }
@@ -85,7 +86,7 @@ export class FormValidationService {
       const requestBody = this.getFormValues(form, collection);
       return submitAction(requestBody);
     } else {
-      return throwError('Form is invalid');
+      return throwError(this.translate.instant('Form is invalid'));
     }
   }
 
@@ -94,7 +95,7 @@ export class FormValidationService {
       const requestBody = this.getItemFormValues(form, item);
       return submitAction(requestBody, collectionId);
     } else {
-      return throwError('Form is invalid');
+      return throwError(this.translate.instant('Form is invalid'));
     }
   }
 
@@ -102,10 +103,10 @@ export class FormValidationService {
     if (shouldNavigate) {
       router.navigate([route, ...routeParams]);
     }
-    this.toast.success({ detail: 'SUCCESS', summary: message, duration: 4000 });
+    this.toast.success({ detail: 'SUCCESS', summary: this.translate.instant(message), duration: 4000 });
   }
 
   handleError(error: any, message: string): void {
-    this.toast.error({ detail: 'ERROR', summary: message, duration: 4000 });
+    this.toast.error({ detail: 'ERROR', summary: this.translate.instant(message), duration: 4000 });
   }
 }

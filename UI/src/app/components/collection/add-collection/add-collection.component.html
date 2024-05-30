@@ -1,39 +1,41 @@
 <div class="container mt-5">
   <div class="row justify-content-center mt-5">
     <div class="col-12 col-md-6">
-      <h2>Create collection</h2>
+      <h2>{{"Create collection" | translate}}</h2>
       <form [formGroup]="collectionForm" (ngSubmit)="createCollection()">
         <div class="form-group mt-3">
-          <label for="name">Name</label>
+          <label for="name">{{"Name" | translate}}</label>
           <input type="text" class="form-control collection mt-2" id="name" formControlName="name"
-            placeholder="Enter name" [ngClass]="{'is-invalid': submited && collectionForm.get('name')!.errors}">
+            [attr.placeholder]="'Enter name' | translate"
+            [ngClass]="{'is-invalid': submited && collectionForm.get('name')!.errors}">
           <div *ngIf="submited && collectionForm.get('name')!.hasError('required')" class="invalid-feedback">
-            *Name is required
+            {{"Name is required" | translate}}
           </div>
         </div>
         <div class="form-group mt-3">
-          <label for="description">Description</label>
+          <label for="description">{{"Description" | translate}}</label>
           <input type="text" class="form-control collection mt-2" id="description" formControlName="description"
-            placeholder="Description" [ngClass]="{'is-invalid': submited && collectionForm.get('description')!.errors}">
+            [attr.placeholder]="'Description' | translate"
+            [ngClass]="{'is-invalid': submited && collectionForm.get('description')!.errors}">
           <div *ngIf="submited && collectionForm.get('description')!.hasError('required')" class="invalid-feedback">
-            *Description is required
+            {{"Description is required" | translate}}
           </div>
         </div>
         <div class="form-group mt-3">
-          <label for="category">Category</label>
+          <label for="category">{{"Category" | translate}}</label>
           <select class="form-control collection mt-2" id="category" formControlName="category"
             [ngClass]="{'is-invalid': submited && collectionForm.get('category')!.errors}">
-            <option value="" disabled selected>Select a category</option>
+            <option value="" disabled selected>{{"Select a category" | translate}}</option>
             <option *ngFor="let category of categoryOptions" [value]="category">{{
               collectionService.getCategory(category)
               }}</option>
           </select>
           <div *ngIf="submited && collectionForm.get('category')!.hasError('required')" class="invalid-feedback">
-            *Category is required
+            {{"Category is required" | translate}}
           </div>
         </div>
-        <div class="mt-4"> <button type="submit" class="btn btn-primary">Create</button> |
-          <a [routerLink]="['/collections']"> Go back</a>
+        <div class="mt-4"> <button type="submit" class="btn btn-primary">{{"Create" | translate}}</button> |
+          <a [routerLink]="['/collections']">{{"Go back" | translate}}</a>
         </div>
       </form>
     </div>

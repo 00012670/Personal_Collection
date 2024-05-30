@@ -1,16 +1,16 @@
 <app-navbar></app-navbar>
 
 <div class="centered">
-  <h2 class="mt-5">My collections</h2>
-  <p class="mt-3 pointer" routerLink="/add-collection">Create collection</p>
+  <h2 class="mt-5">{{"My collections" | translate}}</h2>
+  <p class="mt-3 pointer" routerLink="/add-collection">{{"Create collection" | translate}}</p>
 
   <table class="table table-striped mt-3" [class.table-light]="!isDarkMode" [class.table-dark]="isDarkMode">
     <thead>
       <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Description</th>
-        <th scope="col">Category</th>
-        <th scope="col">Items</th>
+        <th scope="col">{{"Name" | translate}}</th>
+        <th scope="col">{{"Description" | translate}}</th>
+        <th scope="col">{{"Category" | translate}}</th>
+        <th scope="col">{{"Items" | translate}}</th>
       </tr>
     </thead>
     <tbody>
@@ -19,7 +19,7 @@
         <td>{{collection.description}}</td>
         <td>{{collectionService.getCategory(collection.category)}}</td>
         <td>
-          <p class="pointer" [routerLink]="['/items', collection.collectionId]">Veiw</p>
+          <p class="pointer" [routerLink]="['/items', collection.collectionId]">{{"View" | translate}}</p>
         </td>
       </tr>
     </tbody>

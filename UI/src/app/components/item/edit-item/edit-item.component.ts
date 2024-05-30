@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Item } from 'src/app/models/item.model';
 import { CollectionService } from 'src/app/services/collection.service';
 import { FormValidationService } from 'src/app/services/form-validation.service';
 import { ItemService } from 'src/app/services/item.service';
+import { LanguageService } from 'src/app/services/language.service';
 
 @Component({
   selector: 'app-edit-item',
@@ -27,6 +29,8 @@ export class EditItemComponent {
     private formValidation: FormValidationService,
     private router: Router,
     private itemService: ItemService,
+    private languageService: LanguageService,
+    private translate: TranslateService
   ) {
     this.itemForm = this.formValidation.itemValidator({} as Item);
   }
@@ -70,18 +74,16 @@ export class EditItemComponent {
     this.formValidation.submitItemForm(this.itemForm, this.itemDetails, this.collectionId, (body) =>
       this.itemService.updateItem(this.itemDetails.itemId, body))
       .subscribe({
-        next: () => this.formValidation.handleSuccess('Item updated successfully', this.router, '/items', [this.collectionId]),
-        error: (error) => this.formValidation.handleError(error, 'Error updating item')
+        next: () => this.formValidation.handleSuccess(this.translate.instant('Item updated successfully'), this.router, '/items', [this.collectionId]),
+        error: (error) => this.formValidation.handleError(error, this.translate.instant('Error updating item'))
       });
   }
 
   deleteItem(itemId: number) {
-    if (this.itemDetails.itemId && confirm('Are you sure you want to remove the collection?')) {
-      this.itemService.deleteItem(itemId)
-        .subscribe(
-          () => this.formValidation.handleSuccess('Item deleted successfully', this.router, '/items', [this.collectionId]),
-          (error) => this.formValidation.handleError(error, 'This item cannot be deleted')
-        );
-    }
+    this.itemService.deleteItem(itemId)
+      .subscribe(
+        () => this.formValidation.handleSuccess(this.translate.instant('Item deleted successfully'), this.router, '/items', [this.collectionId]),
+        (error) => this.formValidation.handleError(error, this.translate.instant('This item cannot be deleted'))
+      );
   }
 }

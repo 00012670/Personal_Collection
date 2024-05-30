@@ -27,7 +27,7 @@ export class UserIdentityService {
       }
     }
   }
-
+  
   errorHandler(error: HttpErrorResponse) {
     return throwError(error.error || 'Server Error');
   }

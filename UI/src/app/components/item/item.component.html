@@ -2,18 +2,18 @@
 
 <div class="centered">
   <div *ngIf="isOwnCollection()">
-    <h2 class="mt-5">My Items</h2>
-    <p class="mt-3 pointer" [routerLink]="['/add-item', collectionId]">Create item</p>
+    <h2 class="mt-5">{{"My Items" | translate}}</h2>
+    <p class="mt-3 pointer" [routerLink]="['/add-item', collectionId]">{{"Create item" | translate}}</p>
   </div>
   <div *ngIf="!isOwnCollection()">
-    <h2 class="mt-5">User's Items</h2>
+    <h2 class="mt-5">{{"User's Items" | translate}}</h2>
   </div>
   <table class="table table-striped mt-3" [class.table-light]="!isDarkMode" [class.table-dark]="isDarkMode">
     <thead>
       <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Description</th>
-        <th scope="col">Action</th>
+        <th scope="col">{{"Name" | translate}}</th>
+        <th scope="col">{{"Description" | translate}}</th>
+        <th scope="col">{{"Action" | translate}}</th>
       </tr>
     </thead>
     <tbody>
@@ -23,10 +23,9 @@
         </td>
         <td>{{item.description}}</td>
         <td>
-          <p class="pointer" [routerLink]="['/item-details', item.itemId]">View</p>
+          <p class="pointer" [routerLink]="['/item-details', item.itemId]">{{"View" | translate}}</p>
         </td>
       </tr>
     </tbody>
   </table>
 </div>
-

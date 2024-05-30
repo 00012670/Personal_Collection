@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ThemeService } from 'src/app/services/theme.service';
 import { UserIdentityService } from 'src/app/services/user-identity.service';
+import { LanguageService } from 'src/app/services/language.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,10 +13,10 @@ export class NavbarComponent implements OnInit {
   searchText: any;
   isDarkMode!: boolean;
 
-
   constructor(
     private userIdentity: UserIdentityService,
     public themeService: ThemeService,
+    public languageService: LanguageService
   ) { }
 
   ngOnInit() {

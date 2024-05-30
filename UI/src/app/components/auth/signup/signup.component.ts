@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { UserIdentityService } from 'src/app/services/user-identity.service';
 import { FormValidationService } from 'src/app/services/form-validation.service';
 import { ThemeService } from 'src/app/services/theme.service';
+import { TranslateService } from '@ngx-translate/core';
+import { LanguageService } from 'src/app/services/language.service';
+
 
 @Component({
   selector: 'app-signup',
@@ -22,7 +25,9 @@ export class SignupComponent {
     private identityService: UserIdentityService,
     private router: Router,
     private formValidation: FormValidationService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private languageService: LanguageService,
+    private translate: TranslateService
   ) {
     this.signUpForm = this.formValidation.SignupValidator();
   }
@@ -41,7 +46,7 @@ export class SignupComponent {
           const token = response.token;
           const decodedToken = this.identityService.decodeToken(token);
           this.identityService.currentUser.next(decodedToken);
-          this.formValidation.handleSuccess("Login successfuly", this.router, 'dashboard');
+          this.formValidation.handleSuccess(this.translate.instant("Signup successfully"), this.router, 'dashboard');
         },
         (error) => {
           this.formValidation.handleError(error, error.message);

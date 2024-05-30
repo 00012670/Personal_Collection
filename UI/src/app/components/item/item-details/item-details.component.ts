@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
 import { Item } from 'src/app/models/item.model';
 import { CollectionService } from 'src/app/services/collection.service';
 import { ItemService } from 'src/app/services/item.service';
 import { LikeService } from 'src/app/services/like.service';
 import { UserIdentityService } from 'src/app/services/user-identity.service';
+import { LanguageService } from 'src/app/services/language.service';
 
 @Component({
   selector: 'app-item-details',
@@ -26,7 +26,8 @@ export class ItemDetailsComponent {
     public collectionService: CollectionService,
     private likeService: LikeService,
     private userIdentityService: UserIdentityService,
-    private itemService: ItemService
+    private itemService: ItemService,
+    private languageService: LanguageService
   ) { }
 
   ngOnInit(): void {

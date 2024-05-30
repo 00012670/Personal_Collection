@@ -24,8 +24,8 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-            .AllowAnyOrigin()
-            //   .WithOrigins("http://trustedwebsite.com")
+            //.AllowAnyOrigin()
+             .WithOrigins("https://personalcollection.azurewebsites.net/")
             .AllowAnyMethod()
             .AllowAnyHeader();
         });
@@ -56,7 +56,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DBContext>(o =>
 {
-    o.UseSqlServer(builder.Configuration.GetConnectionString("PersonalCollection"));
+     o.UseSqlServer(builder.Configuration.GetConnectionString("ProdConnection"));
+    //o.UseSqlServer(builder.Configuration.GetConnectionString("PersonalCollection"));
+
 });
 
 builder.Services.AddSpaStaticFiles(configuration =>

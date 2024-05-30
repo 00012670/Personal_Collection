@@ -3,3 +3,9 @@ button[mat-icon-button] {
   align-items: center;
   justify-content: center;
 }
+
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

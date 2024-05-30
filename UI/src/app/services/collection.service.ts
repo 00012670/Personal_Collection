@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Collection, CollectionCategory } from '../models/collection.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -11,18 +12,18 @@ import { Collection, CollectionCategory } from '../models/collection.model';
 export class CollectionService {
 
   baseApiUrl: string = environment.baseApi
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private translate: TranslateService) { }
 
   getCategory(category: CollectionCategory): string {
     const categories = {
-      [CollectionCategory.Books]: 'Books',
-      [CollectionCategory.Stamps]: 'Stamps',
-      [CollectionCategory.Coins]: 'Coins',
-      [CollectionCategory.Art]: 'Art',
-      [CollectionCategory.Antiques]: 'Antiques',
-      [CollectionCategory.Memorabilia]: 'Memorabilia',
-      [CollectionCategory.Photographs]: 'Photographs',
-      [CollectionCategory.Other]: 'Other'
+      [CollectionCategory.Books]: this.translate.instant('Books'),
+      [CollectionCategory.Stamps]: this.translate.instant('Stamps'),
+      [CollectionCategory.Coins]: this.translate.instant('Coins'),
+      [CollectionCategory.Art]: this.translate.instant('Art'),
+      [CollectionCategory.Antiques]: this.translate.instant('Antiques'),
+      [CollectionCategory.Memorabilia]: this.translate.instant('Memorabilia'),
+      [CollectionCategory.Photographs]: this.translate.instant('Photographs'),
+      [CollectionCategory.Other]: this.translate.instant('Other')
     };
     return categories[category] || '';
   }

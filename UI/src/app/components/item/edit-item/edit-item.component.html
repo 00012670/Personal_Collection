@@ -2,35 +2,35 @@
   <div class="row justify-content-center mt-5">
     <div class="col-12 col-md-6">
 
-      <h2>Update Item</h2>
+      <h2>{{"Update Item" | translate}}</h2>
 
       <form [formGroup]="itemForm" (ngSubmit)="updateItem()">
 
         <div class="form-group mt-3">
-          <label for="name">Name</label>
+          <label for="name">{{"Name" | translate}}</label>
           <input type="text" class="form-control collection mt-2" id="name" formControlName="name"
-            placeholder="Enter name" [ngClass]="{'is-invalid': submited && itemForm.get('name')!.errors}">
+          [attr.placeholder]="'Enter name' | translate" [ngClass]="{'is-invalid': submited && itemForm.get('name')!.errors}">
           <div *ngIf="submited && itemForm.get('name')!.hasError('required')" class="invalid-feedback">
-            *Name is required
+            {{"Name is required" | translate}}
           </div>
         </div>
 
         <div class="form-group mt-3">
-          <label for="description">Description</label>
+          <label for="description">{{"Description" | translate}}</label>
           <input type="text" class="form-control collection mt-2" id="description" formControlName="description"
-            placeholder="Description" [ngClass]="{'is-invalid': submited && itemForm.get('description')!.errors}">
+          [attr.placeholder]="'Enter description' | translate" [ngClass]="{'is-invalid': submited && itemForm.get('description')!.errors}">
           <div *ngIf="submited && itemForm.get('description')!.hasError('required')" class="invalid-feedback">
-            *Description is required
+            {{"Description is required" | translate}}
           </div>
         </div>
 
         <div class="mt-4">
-          <button type="submit" class="btn btn-primary" style="margin-right: 10px">Update</button>
+          <button type="submit" class="btn btn-primary" style="margin-right: 10px">{{"Update" | translate}}</button>
           <button type="button" class="btn btn-danger"
-            (click)="deleteItem(itemDetails.itemId)">Delete</button>
+          (click)="deleteItem(itemDetails.itemId)">{{"Delete" | translate}}</button>
         </div>
         <div class="mt-3">
-          <a [routerLink]="['/items', collectionId]"> Go back</a>
+          <a [routerLink]="['/items', collectionId]"> {{"Go back" | translate}}</a>
         </div>
       </form>
     </div>

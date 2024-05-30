@@ -5,6 +5,7 @@ import { Review } from 'src/app/models/comment';
 import { CommentService } from 'src/app/services/comment.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { UserIdentityService } from 'src/app/services/user-identity.service';
+import  { LanguageService } from 'src/app/services/language.service';
 
 @Component({
   selector: 'app-comment',
@@ -23,7 +24,8 @@ export class CommentComponent {
     private themeService: ThemeService,
     private route: ActivatedRoute,
     private userIdentityService: UserIdentityService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private languageService: LanguageService
   ) { }
 
   ngOnInit(): void {

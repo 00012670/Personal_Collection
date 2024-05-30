@@ -1,4 +1,8 @@
-<button class="btn btn-outline-secondary" mat-icon-button (click)="toggleTheme()">
-<mat-icon>{{ isDarkMode ? 'brightness_high' : 'brightness_3' }}</mat-icon></button>
-
-
+<div class="d-flex justify-content-start">
+  <button class="btn btn-outline-secondary mr" mat-icon-button (click)="toggleTheme()">
+    <mat-icon>{{ isDarkMode ? 'brightness_high' : 'brightness_3' }}</mat-icon>
+  </button>
+  <button class="btn btn-outline-secondary" (click)="toggleLanguage()">
+    {{ isEnglish ? 'EN' : 'RU' }}
+  </button>
+</div>

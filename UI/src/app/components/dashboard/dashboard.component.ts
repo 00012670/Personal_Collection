@@ -6,6 +6,8 @@ import { UserService } from 'src/app/services/user.service';
 import { combineLatest } from 'rxjs';
 import { UserOperationsService } from 'src/app/services/user-operaton.service';
 import { FormValidationService } from 'src/app/services/form-validation.service';
+import { LanguageService } from 'src/app/services/language.service';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -27,6 +29,8 @@ export class DashboardComponent implements OnInit {
     private userOperations: UserOperationsService,
     private themeService: ThemeService,
     private formValidation: FormValidationService,
+    private languageService: LanguageService,
+    private translate: TranslateService
   ) { }
 
 ngOnInit(): void {
@@ -115,7 +119,7 @@ setSelectedUsers(): void {
 
   private hasSelectedUsers(): boolean {
     if (this.selectedUsers.length === 0) {
-      this.formValidation.handleError(null, 'No users selected');
+      this.formValidation.handleError(null, this.translate.instant('No users selected'));
       return false;
     }
     return true;

@@ -4,7 +4,8 @@ import { FormGroup } from '@angular/forms';
 import { CategoryOptions, Collection } from 'src/app/models/collection.model';
 import { CollectionService } from 'src/app/services/collection.service';
 import { FormValidationService } from 'src/app/services/form-validation.service';
-import { KeyInputService } from 'src/app/services/key-input.service';
+import { LanguageService } from 'src/app/services/language.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-collection',
@@ -24,6 +25,8 @@ export class EditCollectionComponent implements OnInit {
     public collectionService: CollectionService,
     private formValidation: FormValidationService,
     private router: Router,
+    private languageService: LanguageService,
+    private translate: TranslateService
   ) {
     this.collectionForm = this.formValidation.collectionValidator({} as Collection);
   }
@@ -63,18 +66,16 @@ export class EditCollectionComponent implements OnInit {
     this.formValidation.submitForm(this.collectionForm, this.collectionDetails,
       (body) => this.collectionService.editCollection(this.collectionDetails.collectionId, body))
       .subscribe({
-        next: () => this.formValidation.handleSuccess('Collection updated successfully', this.router, 'collections'),
-        error: (error) => this.formValidation.handleError(error, 'Error updating collection')
+        next: () => this.formValidation.handleSuccess(this.translate.instant('Collection updated successfully'), this.router, 'collections'),
+        error: (error) => this.formValidation.handleError(error, this.translate.instant('Error updating collection'))
       });
   }
 
   deleteCollection(collectionId: number) {
-    if (this.collectionDetails.collectionId && confirm('Are you sure you want to remove the collection?')) {
-      this.collectionService.deleteCollection(collectionId)
-        .subscribe(
-          () => this.formValidation.handleSuccess('Collection deleted successfully', this.router, 'collections'),
-          (error) => this.formValidation.handleError(error, 'This collection cannot be deleted')
-        );
-    }
+    this.collectionService.deleteCollection(collectionId)
+      .subscribe(
+        () => this.formValidation.handleSuccess(this.translate.instant('Collection deleted successfully'), this.router, 'collections'),
+        (error) => this.formValidation.handleError(error, this.translate.instant('This collection cannot be deleted'))
+      );
   }
 }

@@ -22,6 +22,8 @@
     "@angular/router": "^17.3.7",
     "@auth0/angular-jwt": "^5.2.0",
     "@ng-bootstrap/ng-bootstrap": "^16.0.0",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
     "@sentry/angular": "^8.2.1",
     "@sentry/tracing": "^7.114.0",
     "bootstrap": "^5.3.3",

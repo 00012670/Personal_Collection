@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map, } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Role, Status, User } from '../models/user.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { Role, Status, User } from '../models/user.model';
 export class UserService {
 
   baseApiUrl: string = environment.baseApi
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private translate: TranslateService) { }
 
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseApiUrl}/users`);
@@ -19,16 +20,16 @@ export class UserService {
 
   getRole(role: Role): string {
     const roles = {
-      [Role.User]: 'User',
-      [Role.Admin]: 'Admin',
+      [Role.User]: this.translate.instant('User'),
+      [Role.Admin]: this.translate.instant('Admin'),
     };
     return roles[role] || '';
   }
 
   getStatus(status: Status): string {
     const statuses = {
-      [Status.Active]: 'Active',
-      [Status.Blocked]: 'Blocked',
+      [Status.Active]: this.translate.instant('Active'),
+      [Status.Blocked]: this.translate.instant('Blocked'),
     };
     return statuses[status] || '';
   }
@@ -40,14 +41,14 @@ export class UserService {
 
   setAccountStatus(userId: number, status: Status): Observable<any> {
     const body = {
-      status: this.getStatus(status),
+      status: status,
     };
     return this.http.put(`${this.baseApiUrl}/${userId}/status`, body);
   }
 
   setAccountRole(userId: number, role: Role): Observable<any> {
     const body = {
-      role: this.getRole(role),
+      role: role,
     };
     return this.http.put(`${this.baseApiUrl}/${userId}/role`, body);
   }

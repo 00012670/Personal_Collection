@@ -1,15 +1,16 @@
 <app-navbar></app-navbar>
 <div class="centered">
-  <h2 class="mt-5">Dashboard</h2>
+  <h2 class="mt-5">{{"Dashboard" | translate}}</h2>
   <div class="btn-toolbar mb-2 mb-md-0">
-    <p>Welcome, {{ currentUser?.unique_name }}! Your email is {{ currentUser?.email }}. Your role is {{ currentUser?.role }}. </p>
+    <p>{{"Welcome" | translate}}, {{ currentUser?.unique_name }}! {{"Your email is" | translate}} {{ currentUser?.email
+      }}. {{"Your role is" | translate}} {{ currentUser?.role }}. </p>
   </div>
 
   <app-user-dashboard *ngIf="currentUser.role === 'User'"></app-user-dashboard>
 
   <div *ngIf="currentUser.role === 'Admin'">
-    <button class="btn btn-secondary mr mt-2" (click)="blockSelectedUsers()">Block <svg xmlns="http://www.w3.org/2000/svg"
-        x="0px" y="0px" width="20" height="20" viewBox="0,0,256,256">
+    <button class="btn btn-secondary mr mt-2" (click)="blockSelectedUsers()">{{"Block" | translate}}<svg
+        xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0,0,256,256">
         <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
           stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
           font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
@@ -32,8 +33,8 @@
           </g>
         </g>
       </svg></button>
-    <button class="btn btn-danger mr  mt-2" (click)="deleteSelectedUsers()"><svg xmlns="http://www.w3.org/2000/svg" x="0px"
-        y="0px" width="20" height="20" viewBox="0,0,256,256">
+    <button class="btn btn-danger mr  mt-2" (click)="deleteSelectedUsers()"><svg xmlns="http://www.w3.org/2000/svg"
+        x="0px" y="0px" width="20" height="20" viewBox="0,0,256,256">
         <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
           stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"
           font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
@@ -45,23 +46,24 @@
         </g>
       </svg></button>
     <br>
-    <button class="btn btn-primary mr mt-2" (click)="grantAdminRole()">Grant admin role</button>
-    <button class="btn btn-primary mt-2" (click)="removeAdminRole()">Remove admin role</button>
+    <button class="btn btn-primary mr mt-2" (click)="grantAdminRole()">{{"Grant admin role" | translate}}</button>
+    <button class="btn btn-primary mt-2" (click)="removeAdminRole()">{{"Remove admin role" | translate}}</button>
 
-    <h2 class="mt-4">All Users</h2>
+    <h2 class="mt-4">{{"All Users" | translate}}</h2>
     <table class="table table-striped mt-3" [class.table-light]="!isDarkMode" [class.table-dark]="isDarkMode">
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Username</th>
-          <th scope="col">Email</th>
-          <th scope="col">Role</th>
-          <th scope="col">Status</th>
+          <th scope="col">{{"Username" | translate}}</th>
+          <th scope="col">{{"Email" | translate}}</th>
+          <th scope="col">{{"Role" | translate}}</th>
+          <th scope="col">{{"Status" | translate}}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let user of users">
-            <td><input type="checkbox" class="checkbox" [(ngModel)]="user.isSelected" (click)="toggleSelection(user)"></td>
+          <td><input type="checkbox" class="checkbox" [(ngModel)]="user.isSelected" (click)="toggleSelection(user)">
+          </td>
           <td>{{user.username}}</td>
           <td>{{user.email}}</td>
           <td>{{userService.getRole(user.role)}}</td>
