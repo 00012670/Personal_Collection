@@ -90,5 +90,13 @@
     "Item updated successfully": "Предмет успешно обновлен",
     "Error updating item": "Ошибка при обновлении предмета",
     "Item deleted successfully": "Предмет успешно удален",
-    "This item cannot be deleted": "Этот Предмет нельзя удалить"
+    "This item cannot be deleted": "Этот Предмет нельзя удалить",
+    "Username or email already exists.": "Имя пользователя или адрес электронной почты уже существуют.",
+    "Invalid username or password.": "Неверное имя пользователя или пароль.",
+    "Your account is blocked.": "Ваш аккаунт заблокирован.",
+    "Username, email and password are required.": "Требуются имя пользователя, электронная почта и пароль.",
+    "Email is not in correct format.": "Электронная почта не в правильном формате.",
+    "Password must be at least 8 characters long.": "Пароль должен быть длиной не менее 8 символов.",
+    "Password must contain at least one special character.": "Пароль должен содержать хотя бы один специальный символ.",
+    "Identifier and password are required.": "Требуются идентификатор и пароль."
   }

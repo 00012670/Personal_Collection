@@ -46,7 +46,6 @@ namespace API.Services
             {
                 return new ValidationResult(false, "Identifier and password are required.");
             }
-
             return new ValidationResult(true, null);
         }
     }
@@ -60,6 +59,5 @@ namespace API.Services
             IsValid = isValid;
             ErrorMessage = errorMessage;
         }
-
     }
 }

@@ -25,12 +25,10 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<Item>>> GetItemsByCollection(int collectionId)
         {
             var items = await _context.Items.Where(i => i.CollectionId == collectionId).ToListAsync();
-
             if (items == null || !items.Any())
             {
                 return NotFound();
             }
-
             return items;
         }
 
@@ -38,12 +36,10 @@ namespace API.Controllers
         public async Task<ActionResult<Item>> GetItem(int id)
         {
             var item = await _context.Items.FindAsync(id);
-
             if (item == null)
             {
                 return NotFound();
             }
-
             return item;
         }
 
@@ -54,25 +50,8 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-
             _context.Entry(item).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
@@ -84,11 +63,9 @@ namespace API.Controllers
             {
                 return NotFound("Collection not found");
             }
-
             item.CollectionId = collectionId;
             _context.Items.Add(item);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetItem", new { id = item.ItemId }, item);
         }
 
@@ -103,10 +80,6 @@ namespace API.Controllers
             _context.Items.Remove(item);
             await _context.SaveChangesAsync();
             return NoContent();
-        }
-        private bool ItemExists(int id)
-        {
-            return _context.Items.Any(e => e.ItemId == id);
         }
     }
 }

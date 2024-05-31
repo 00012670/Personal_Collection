@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using API.Context;
 using API.Models;
 using API.Services;
@@ -16,7 +15,6 @@ public class UserController : Controller
         _userService = userService;
     }
 
-
     [HttpGet("users")]
     public async Task<IActionResult> GetAllUsers()
     {
@@ -24,14 +22,8 @@ public class UserController : Controller
         return Ok(users);
     }
 
-    public class UpdateUserStatusModel
-    {
-        [Required]
-        public string? Status { get; set; }
-    }
-
     [HttpPut("{id}/status")]
-    public async Task<IActionResult> SetAccountStatus(int id, [FromBody] UpdateUserStatusModel model)
+    public async Task<IActionResult> SetAccountStatus(int id, [FromBody] UserStatus model)
     {
         if (!Enum.TryParse<Status>(model.Status, true, out var status))
         {
@@ -47,20 +39,8 @@ public class UserController : Controller
         return NoContent();
     }
 
-    public class UpdateUseRoleModel
-    {
-        [Required]
-        public string? Role { get; set; }
-    }
-
-    public class UpdateUserSelectionModel
-    {
-        [Required]
-        public bool? IsSelected { get; set; }
-    }
-
     [HttpPut("{id}/selection")]
-    public async Task<IActionResult> SetUserSelection(int id, [FromBody] UpdateUserSelectionModel model)
+    public async Task<IActionResult> SetUserSelection(int id, [FromBody] UserSelection model)
     {
         var user = await _context.Users.FindAsync(id);
         if (user == null)
@@ -73,7 +53,7 @@ public class UserController : Controller
     }
 
     [HttpPut("{id}/role")]
-    public async Task<IActionResult> SetUserRole(int id, [FromBody] UpdateUseRoleModel model)
+    public async Task<IActionResult> SetUserRole(int id, [FromBody] UserRole model)
     {
         if (!Enum.TryParse<Role>(model.Role, true, out var role))
         {

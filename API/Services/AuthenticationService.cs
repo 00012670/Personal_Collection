@@ -10,9 +10,7 @@ namespace API.Services
 {
     public class AuthenticationService(
         IPasswordHasher<User> passwordHasher,
-        IOptions<JWTSettings> jwtSettings
-
-    )
+        IOptions<JWTSettings> jwtSettings)
     {
         private readonly IPasswordHasher<User> _passwordHasher = passwordHasher;
         private readonly string? _jwtSecret = jwtSettings.Value.SecretFKey;

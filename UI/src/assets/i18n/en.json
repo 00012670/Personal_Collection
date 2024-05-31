@@ -91,5 +91,13 @@
   "Item updated successfully": "Item updated successfully",
   "Error updating item": "Error updating item",
   "Item deleted successfully": "Item deleted successfully",
-  "This item cannot be deleted": "This item cannot be deleted"
+  "This item cannot be deleted": "This item cannot be deleted",
+  "Username or email already exists.": "Username or email already exists.",
+  "Invalid username or password.": "Invalid username or password.",
+  "Your account is blocked.": "Your account is blocked.",
+  "Username, email and password are required.": "Username, email and password are required.",
+  "Email is not in correct format.": "Email is not in correct format.",
+  "Password must be at least 8 characters long.": "Password must be at least 8 characters long.",
+  "Password must contain at least one special character.": "Password must contain at least one special character.",
+  "Identifier and password are required.": "Identifier and password are required."
 }

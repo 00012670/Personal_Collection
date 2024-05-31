@@ -50,28 +50,8 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            var userExists = await _context.Users.AnyAsync(u => u.UserId == collection.UserId);
-            if (!userExists)
-            {
-                return BadRequest("User does not exist");
-            }
-
             _context.Entry(collection).State = EntityState.Modified;
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CollectionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
             return NoContent();
         }
 
@@ -99,11 +79,6 @@ namespace API.Controllers
             _context.Collections.Remove(collection);
             await _context.SaveChangesAsync();
             return NoContent();
-        }
-
-        private bool CollectionExists(int id)
-        {
-            return _context.Collections.Any(e => e.CollectionId == id);
         }
     }
 }
