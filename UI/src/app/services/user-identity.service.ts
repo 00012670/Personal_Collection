@@ -27,7 +27,7 @@ export class UserIdentityService {
       }
     }
   }
-  
+
   errorHandler(error: HttpErrorResponse) {
     return throwError(error.error || 'Server Error');
   }
@@ -75,5 +75,9 @@ export class UserIdentityService {
 
   getUserId(): number | null {
     return this.currentUser.value?.nameid ? Number(this.currentUser.value.nameid) : null;
+  }
+
+  isAdmin(): boolean {
+    return this.currentUser.value?.role === 'Admin';
   }
 }

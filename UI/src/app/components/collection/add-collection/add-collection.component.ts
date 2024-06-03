@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { CategoryOptions, Collection } from 'src/app/models/collection.model';
 import { CollectionService } from 'src/app/services/collection.service';
@@ -7,7 +7,6 @@ import { FormValidationService } from 'src/app/services/form-validation.service'
 import { Router } from '@angular/router';
 import { LanguageService } from 'src/app/services/language.service';
 import { TranslateService } from '@ngx-translate/core';
-import { KeyInputService } from 'src/app/services/key-input.service';
 
 @Component({
   selector: 'app-add-collection',
@@ -15,8 +14,6 @@ import { KeyInputService } from 'src/app/services/key-input.service';
   styleUrl: './add-collection.component.css'
 })
 export class AddCollectionComponent {
-  @ViewChild('collectionFormElement', { static: true }) collectionFormElement!: ElementRef;
-
   collectionForm!: FormGroup;
   userId!: number;
   submited = false;
@@ -30,9 +27,7 @@ export class AddCollectionComponent {
     private formValidation: FormValidationService,
     private router: Router,
     private languageService: LanguageService,
-    private translate: TranslateService,
-    private keyInputService: KeyInputService
-
+    private translate: TranslateService
   ) {
     this.collection = {} as Collection;
     this.collectionForm = this.formValidation.collectionValidator({} as Collection);
@@ -41,9 +36,6 @@ export class AddCollectionComponent {
   ngOnInit(): void {
     this.userId = this.userIdentityService.getUserId() ?? 0;
     this.collection.userId = this.userId;
-    this.keyInputService.listenForEnterKey(this.collectionFormElement).subscribe(() => {
-      this.createCollection();
-    });
   }
 
   createCollection(): void {

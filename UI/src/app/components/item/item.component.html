@@ -19,7 +19,11 @@
     <tbody>
       <tr *ngFor="let item of itemList">
         <td>
-          <p class="pointer" [routerLink]="['/edit-item', item.itemId]">{{item.name}}</p>
+          <p *ngIf="userIdentityService.isAdmin() || isOwnCollection(); else viewOnly" class="pointer"
+            [routerLink]="['/edit-item', item.itemId]">{{item.name}}</p>
+          <ng-template #viewOnly>
+            <p>{{item.name}}</p>
+          </ng-template>
         </td>
         <td>{{item.description}}</td>
         <td>

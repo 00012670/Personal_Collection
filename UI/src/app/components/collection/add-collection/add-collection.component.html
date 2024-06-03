@@ -2,7 +2,7 @@
   <div class="row justify-content-center mt-5">
     <div class="col-12 col-md-6">
       <h2>{{"Create collection" | translate}}</h2>
-      <form #collectionFormElement="ngForm"  [formGroup]="collectionForm" (ngSubmit)="createCollection()">
+      <form  #collectionFormElement="ngForm"   [formGroup]="collectionForm" (ngSubmit)="createCollection()">
         <div class="form-group mt-3">
           <label for="name">{{"Name" | translate}}</label>
           <input type="text" class="form-control collection mt-2" id="name" formControlName="name"

@@ -31,7 +31,7 @@ export class ItemComponent {
     public collectionService: CollectionService,
     private themeService: ThemeService,
     private route: ActivatedRoute,
-    private userIdentityService: UserIdentityService
+    public userIdentityService: UserIdentityService
 
   ) { }
 
@@ -40,7 +40,7 @@ export class ItemComponent {
     this.SetThemeMode();
     this.RouteParams();
   }
-  
+
   SetThemeMode(): void {
     this.themeService.isDarkMode().subscribe((isDarkMode: boolean) => {
       this.isDarkMode = isDarkMode;
