@@ -26,6 +26,7 @@ import { ItemDetailsComponent } from './components/item/item-details/item-detail
 import { CommentComponent } from './components/comment/comment.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { CreateTicketComponent } from './components/create-ticket/create-ticket.component';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -50,7 +51,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AddItemComponent,
     EditItemComponent,
     ItemDetailsComponent,
-    CommentComponent
+    CommentComponent,
+    CreateTicketComponent
   ],
   imports: [
     BrowserModule,

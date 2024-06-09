@@ -98,6 +98,16 @@
   "Username, email and password are required.": "Username, email and password are required.",
   "Email is not in correct format.": "Email is not in correct format.",
   "Password must be at least 8 characters long.": "Password must be at least 8 characters long.",
-  "Password must contain at least one special character.": "Password must contain at least one special character.",
-  "Identifier and password are required.": "Identifier and password are required."
+  "Help": "Help",
+  "Create Ticket": "Create Ticket",
+  "Summary": "Summary",
+  "Enter summary": "Enter summary",
+  "Priority": "Priority",
+  "Select a priority": "Select a priority",
+  "High": "High",
+  "Average": "Average",
+  "Low": "Low",
+  "Summary is required": "Summary is required",
+  "Priority is required": "Priority is required",
+  "Ticket created": "Ticket created"
 }

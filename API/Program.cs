@@ -1,3 +1,4 @@
+
 using API.Context;
 using API.Models;
 using API.Services;
@@ -47,12 +48,12 @@ builder.Services.AddDbContext<DBContext>(o =>
     // o.UseSqlServer(builder.Configuration.GetConnectionString("ProdConnection"));
     o.UseSqlServer(builder.Configuration.GetConnectionString("PersonalCollection"));
 });
+builder.Services.Configure<JiraSettings>(builder.Configuration.GetSection("JiraSettings"));
 
 builder.Services.AddSpaStaticFiles(configuration =>
 {
     configuration.RootPath = "wwwroot";
 });
-
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<UserService>();
@@ -62,6 +63,11 @@ builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("Jwt"))
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
 );
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<JiraService>();
+builder.Logging.AddDebug();
+builder.Logging.AddConsole();
+
 
 var app = builder.Build();
 
@@ -90,7 +96,6 @@ app.UseAuthorization();
 
 // Use the localization middleware
 var localizationOptionsService = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
-
 app.MapControllers();
 app.UseCors("AllowAllOrigins");
 app.Run();
