@@ -36,7 +36,7 @@ export class ItemDetailsComponent {
       next: (params) => {
         const id = params.get('id');
         if (id) {
-          this.itemService.getItemById(+id)
+          this.itemService.getItemById(Number(id))
             .subscribe({
               next: (response: any) => {
                 const item = response as Item;

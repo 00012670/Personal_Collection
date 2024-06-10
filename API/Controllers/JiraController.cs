@@ -15,7 +15,7 @@ public class JiraController : ControllerBase
     [HttpPost("create-jira-ticket")]
     public async Task<IActionResult> CreateJiraTicket([FromBody] JiraTicketRequest request)
     {
-        var ticketKey = await _jiraService.CreateJiraTicket(request.Summary, request.Priority, request.Link);
+        var ticketKey = await _jiraService.CreateJiraTicket(request.Summary, request.Priority, request.Collection, request.Link);
         return Ok(new { key = ticketKey });
     }
 }

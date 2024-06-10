@@ -109,5 +109,6 @@
   "Low": "Low",
   "Summary is required": "Summary is required",
   "Priority is required": "Priority is required",
-  "Ticket created": "Ticket created"
+  "Ticket created": "Ticket created",
+  "No items created": "No items created"
 }

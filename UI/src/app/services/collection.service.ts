@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of, tap } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Collection, CollectionCategory } from '../models/collection.model';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 export class CollectionService {
 
+  currentCollection!: Collection;
   baseApiUrl: string = environment.baseApi
   constructor(private http: HttpClient, private translate: TranslateService) { }
 
@@ -37,7 +38,13 @@ export class CollectionService {
   }
 
   getCollection(collectionId: number): Observable<any> {
-    return this.http.get(`${this.baseApiUrl}/Collections/GetCollection/${collectionId}`);
+    return this.http.get(`${this.baseApiUrl}/Collections/GetCollection/${collectionId}`).pipe(
+      tap(collection => this.currentCollection = collection as Collection)
+    );
+  }
+
+  getCurrentCollection(): Observable<Collection> {
+    return of(this.currentCollection);
   }
 
   createCollection(collection: any): Observable<any> {

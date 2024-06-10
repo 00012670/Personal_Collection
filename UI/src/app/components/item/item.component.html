@@ -8,28 +8,36 @@
   <div *ngIf="!isOwnCollection()">
     <h2 class="mt-5">{{"User's Items" | translate}}</h2>
   </div>
-  <table class="table table-striped mt-3" [class.table-light]="!isDarkMode" [class.table-dark]="isDarkMode">
-    <thead>
-      <tr>
-        <th scope="col">{{"Name" | translate}}</th>
-        <th scope="col">{{"Description" | translate}}</th>
-        <th scope="col">{{"Action" | translate}}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of itemList">
-        <td>
-          <p *ngIf="userIdentityService.isAdmin() || isOwnCollection(); else viewOnly" class="pointer"
-            [routerLink]="['/edit-item', item.itemId]">{{item.name}}</p>
-          <ng-template #viewOnly>
-            <p>{{item.name}}</p>
-          </ng-template>
-        </td>
-        <td>{{item.description}}</td>
-        <td>
-          <p class="pointer" [routerLink]="['/item-details', item.itemId]">{{"View" | translate}}</p>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <ng-container *ngIf="itemList.length > 0; else noItems">
+    <table class="table table-striped mt-3" [class.table-light]="!isDarkMode" [class.table-dark]="isDarkMode">
+      <thead>
+        <tr>
+          <th scope="col">{{"Name" | translate}}</th>
+          <th scope="col">{{"Description" | translate}}</th>
+          <th scope="col">{{"Action" | translate}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of itemList">
+          <td>
+            <p *ngIf="userIdentityService.isAdmin() || isOwnCollection(); else viewOnly" class="pointer"
+              [routerLink]="['/edit-item', item.itemId]">{{item.name}}</p>
+            <ng-template #viewOnly>
+              <p>{{item.name}}</p>
+            </ng-template>
+          </td>
+          <td>{{item.description}}</td>
+          <td>
+            <p class="pointer" [routerLink]="['/item-details', item.itemId]">{{"View" | translate}}</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-template #noItems>
+    <h3 class="mt-5">{{"No items created" | translate}}</h3>
+  </ng-template>
+  <a [routerLink]="['/collections']">{{"Go back" | translate}}</a> |
+
+  <app-create-ticket></app-create-ticket>
 </div>

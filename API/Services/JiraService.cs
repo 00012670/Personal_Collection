@@ -16,7 +16,7 @@ public class JiraService
         _jiraSettings = jiraSettings.Value;
         _logger = logger;
     }
-    public async Task<string> CreateJiraTicket(string summary, string priority, Uri link)
+    public async Task<string> CreateJiraTicket(string summary, string priority, string Collection, Uri link)
     {
         try
         {
@@ -30,8 +30,8 @@ public class JiraService
                     summary = summary,
                     issuetype = new { name = "Task" },
                     customfield_10036 = priority,
-                    customfield_10037 = link,
-                    
+                    customfield_10032 = Collection,
+                    customfield_10037 = link,                
                 }
             };
 
@@ -80,31 +80,31 @@ public class JiraService
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task<List<JiraTicket>> GetUserTickets(string userEmail)
-    {
-        var authValue = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_jiraSettings.Username}:{_jiraSettings.ApiToken}"));
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authValue);
+    // public async Task<List<JiraTicket>> GetUserTickets(string userEmail)
+    // {
+    //     var authValue = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{_jiraSettings.Username}:{_jiraSettings.ApiToken}"));
+    //     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authValue);
 
-        var response = await _httpClient.GetAsync($"{_jiraSettings.BaseUrl}/rest/api/2/search?jql=reporter={userEmail}");
-        response.EnsureSuccessStatusCode();
+    //     var response = await _httpClient.GetAsync($"{_jiraSettings.BaseUrl}/rest/api/2/search?jql=reporter={userEmail}");
+    //     response.EnsureSuccessStatusCode();
 
-        var responseBody = await response.Content.ReadAsStringAsync();
-        var responseJson = JsonConvert.DeserializeObject<dynamic>(responseBody);
+    //     var responseBody = await response.Content.ReadAsStringAsync();
+    //     var responseJson = JsonConvert.DeserializeObject<dynamic>(responseBody);
 
-        var tickets = new List<JiraTicket>();
-        foreach (var issue in responseJson.issues)
-        {
-            tickets.Add(new JiraTicket
-            {
-                Id = issue.id,
-                Key = issue.key,
-                Summary = issue.fields.summary,
-                Status = issue.fields.status.name,
-                Priority = issue.fields.priority.name
-            });
-        }
+    //     var tickets = new List<JiraTicket>();
+    //     foreach (var issue in responseJson.issues)
+    //     {
+    //         tickets.Add(new JiraTicket
+    //         {
+    //             Id = issue.id,
+    //             Key = issue.key,
+    //             Summary = issue.fields.summary,
+    //             Status = issue.fields.status.name,
+    //             Priority = issue.fields.priority.name
+    //         });
+    //     }
 
-        return tickets;
-    }
+    //     return tickets;
+    // }
 }
 

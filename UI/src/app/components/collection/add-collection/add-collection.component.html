@@ -7,7 +7,7 @@
           <label for="name">{{"Name" | translate}}</label>
           <input type="text" class="form-control collection mt-2" id="name" formControlName="name"
             [attr.placeholder]="'Enter name' | translate"
-            [ngClass]="{'is-invalid': submited && collectionForm.get('name')!.errors}">
+            [ngClass]="{'is-invalid': submited && collectionForm.get('name')!.errors}" autofocus>
           <div *ngIf="submited && collectionForm.get('name')!.hasError('required')" class="invalid-feedback">
             {{"Name is required" | translate}}
           </div>
@@ -34,10 +34,12 @@
             {{"Category is required" | translate}}
           </div>
         </div>
-        <div class="mt-4"> <button type="submit" class="btn btn-primary">{{"Create" | translate}}</button> |
-          <a [routerLink]="['/collections']">{{"Go back" | translate}}</a>
+        <div class="mt-4 mr"> <button type="submit" class="btn btn-primary">{{"Create" | translate}}</button> |
+          <a [routerLink]="['/collections']">{{"Go back" | translate}}</a> |
+          <app-create-ticket></app-create-ticket>
         </div>
       </form>
     </div>
   </div>
 </div>
+

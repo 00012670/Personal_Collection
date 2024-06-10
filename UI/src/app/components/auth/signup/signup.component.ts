@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserIdentityService } from 'src/app/services/user-identity.service';
@@ -7,14 +7,19 @@ import { ThemeService } from 'src/app/services/theme.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from 'src/app/services/language.service';
 
-
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
 
-export class SignupComponent {
+export class SignupComponent implements AfterViewInit {
+  @ViewChild('nameInput')
+  nameInput!: ElementRef;
+
+  ngAfterViewInit() {
+    this.nameInput.nativeElement.focus();
+  }
   type: string = 'password';
   isText: boolean = false;
   eyeIcon: string = 'fa-eye-slash';

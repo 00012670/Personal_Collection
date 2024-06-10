@@ -30,7 +30,7 @@
           (click)="deleteItem(itemDetails.itemId)">{{"Delete" | translate}}</button>
         </div>
         <div class="mt-3">
-          <a [routerLink]="['/items', collectionId]"> {{"Go back" | translate}}</a>
+          <a [routerLink]="['/items', collectionId]"> {{"Go back" | translate}}</a> | <app-create-ticket></app-create-ticket>
         </div>
       </form>
     </div>

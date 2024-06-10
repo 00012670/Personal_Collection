@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
         {
             builder
             .AllowAnyOrigin()
-             //.WithOrigins("https://personalcollection.azurewebsites.net/")
+            // .WithOrigins("https://personalcollection.azurewebsites.net/")
             .AllowAnyMethod()
             .AllowAnyHeader();
         });
@@ -45,7 +45,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DBContext>(o =>
 {
-    // o.UseSqlServer(builder.Configuration.GetConnectionString("ProdConnection"));
+   // o.UseSqlServer(builder.Configuration.GetConnectionString("ProdConnection"));
     o.UseSqlServer(builder.Configuration.GetConnectionString("PersonalCollection"));
 });
 builder.Services.Configure<JiraSettings>(builder.Configuration.GetSection("JiraSettings"));
@@ -59,6 +59,7 @@ builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<ValidationService>();
+builder.Services.AddScoped<LikeService>();
 builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
