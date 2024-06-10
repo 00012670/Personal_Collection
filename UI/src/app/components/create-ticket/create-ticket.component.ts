@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { JiraService } from 'src/app/services/jira.service';
-import { FormValidationService } from 'src/app/services/form-validation.service';
+import { FormValidationService } from 'src/app/services/validation-form.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { LanguageService } from 'src/app/services/language.service';
 import { TranslateService } from '@ngx-translate/core';

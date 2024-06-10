@@ -24,8 +24,7 @@ export class LikeService {
     return this.http.get<boolean>(`${this.baseApiUrl}/Likes/HasLiked/${userId}/${itemId}`);
   }
 
-
-  addLike( itemId: number): Observable<any> {
+  addLike(itemId: number): Observable<any> {
     const userId = this.getCurrentUserId();
       return this.http.post<any>(`${this.baseApiUrl}/Likes/AddLike/${userId}/${itemId}`, {});
   }

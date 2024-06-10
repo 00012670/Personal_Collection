@@ -112,5 +112,6 @@
   "Summary is required": "Требуется сводка",
   "Priority is required": "Требуется приоритет",
   "Ticket created": "Билет создан",
-  "No items created": "Нет созданных предметов"
+  "No items created": "Нет созданных предметов",
+  "Collections": "Коллекции"
 }

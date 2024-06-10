@@ -16,6 +16,15 @@ export class CollectionComponent {
   isDarkMode!: boolean;
   collectionList: Collection[] = [];
   categoryOptions = CategoryOptions;
+  collectionDetails: Collection = {
+    name: '',
+    description: '',
+    category: 0,
+    collectionId: 0,
+    userId: 0
+  };
+  loggedInUserId!: number;
+
 
   constructor(
     public collectionService: CollectionService,

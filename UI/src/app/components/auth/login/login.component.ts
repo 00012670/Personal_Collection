@@ -2,10 +2,11 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { UserIdentityService } from 'src/app/services/user-identity.service';
-import { FormValidationService } from 'src/app/services/form-validation.service';
+import { FormValidationService } from 'src/app/services/validation-form.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { LanguageService } from 'src/app/services/language.service';
 import { TranslateService } from '@ngx-translate/core';
+import { HandlingMessageService } from 'src/app/services/handling-message.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,8 @@ export class LoginComponent implements OnInit {
     private formValidation: FormValidationService,
     private themeService: ThemeService,
     private languageService: LanguageService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private handleMessages: HandlingMessageService,
   ) {
     this.loginForm = this.formValidation.LoginValidator();
   }
@@ -46,10 +48,10 @@ export class LoginComponent implements OnInit {
           const token = response.token;
           const decodedToken = this.identityService.decodeToken(token);
           this.identityService.currentUser.next(decodedToken);
-          this.formValidation.handleSuccess(this.translate.instant("Login successfully"), this.router, 'dashboard');
+          this.handleMessages.handleSuccess(this.translate.instant("Login successfully"), this.router, 'dashboard');
         },
         (error) => {
-          this.formValidation.handleError(error, error.message);
+          this.handleMessages.handleError(error, error.message);
         }
       );
     }

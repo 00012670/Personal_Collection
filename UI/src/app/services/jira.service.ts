@@ -25,14 +25,28 @@ export class JiraService {
   }
 
   createUser(user: any): Observable<any> {
-    const url = `${this.baseApiUrl}/create-user`;
+    const url = `${this.baseApiUrl}/Jira/create-user`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(url, user, { headers });
+    const userWithRoles = {
+      ...user,
+      applicationRoles: ['jira-software']
+    };
+    return this.http.post(url, userWithRoles, { headers }).pipe(
+      catchError(this.handleError)
+    );
   }
+
 
   getUserTickets(userEmail: string): Observable<any> {
     const url = `${this.baseApiUrl}/get-user-tickets?email=${userEmail}`;
     return this.http.get(url);
+  }
+
+  checkUserExists(email: string): Observable<any> {
+    const url = `${this.baseApiUrl}/Jira/check-user?email=${email}`;
+    return this.http.get(url).pipe(
+      catchError(this.handleError)
+    );
   }
 
 }

@@ -4,9 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Item } from 'src/app/models/item.model';
 import { CollectionService } from 'src/app/services/collection.service';
-import { FormValidationService } from 'src/app/services/form-validation.service';
+import { FormValidationService } from 'src/app/services/validation-form.service';
 import { ItemService } from 'src/app/services/item.service';
 import { LanguageService } from 'src/app/services/language.service';
+import { HandlingMessageService } from 'src/app/services/handling-message.service';
+import { submissionFormService } from 'src/app/services/submission-form.service';
 
 @Component({
   selector: 'app-add-item',
@@ -27,7 +29,9 @@ export class AddItemComponent {
     private router: Router,
     private route: ActivatedRoute,
     private languageService: LanguageService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private handleMessages: HandlingMessageService,
+    private submiForm: submissionFormService
   ) {
     this.item = {} as Item;
     this.itemForm = this.formValidation.itemValidator({} as Item);
@@ -40,11 +44,11 @@ export class AddItemComponent {
   createCollection(): void {
     this.submited = true;
     this.item.collectionId = this.collectionId;
-    this.formValidation.submitItemForm(this.itemForm, this.item, this.collectionId, (body) =>
+    this.submiForm.submitItemForm(this.itemForm, this.item, this.collectionId, (body) =>
       this.itemService.addItem(body, this.collectionId))
       .subscribe(
-        () => this.formValidation.handleSuccess(this.translate.instant('Item added successfully'), this.router, '/items', [this.collectionId]),
-        (error) => this.formValidation.handleError(error, this.translate.instant('Error adding item'))
+        () => this.handleMessages.handleSuccess(this.translate.instant('Item added successfully'), this.router, '/items', [this.collectionId]),
+        (error) => this.handleMessages.handleError(error, this.translate.instant('Error adding item'))
       );
   }
 }

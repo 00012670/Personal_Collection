@@ -5,9 +5,10 @@ import { UserIdentityService } from 'src/app/services/user-identity.service';
 import { UserService } from 'src/app/services/user.service';
 import { combineLatest } from 'rxjs';
 import { UserOperationsService } from 'src/app/services/user-operaton.service';
-import { FormValidationService } from 'src/app/services/form-validation.service';
+import { FormValidationService } from 'src/app/services/validation-form.service';
 import { LanguageService } from 'src/app/services/language.service';
 import { TranslateService } from '@ngx-translate/core';
+import { HandlingMessageService } from 'src/app/services/handling-message.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -30,7 +31,8 @@ export class DashboardComponent implements OnInit {
     private themeService: ThemeService,
     private formValidation: FormValidationService,
     private languageService: LanguageService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private handleMessages: HandlingMessageService,
   ) { }
 
 ngOnInit(): void {
@@ -119,7 +121,7 @@ setSelectedUsers(): void {
 
   private hasSelectedUsers(): boolean {
     if (this.selectedUsers.length === 0) {
-      this.formValidation.handleError(null, this.translate.instant('No users selected'));
+      this.handleMessages.handleError(null, this.translate.instant('No users selected'));
       return false;
     }
     return true;

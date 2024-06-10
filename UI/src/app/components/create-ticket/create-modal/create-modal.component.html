@@ -4,7 +4,7 @@
     <div class="form-group mt-3">
       <label for="summary">{{"Summary" | translate}}</label>
       <input type="text" class="form-control mt-2" id="summary" formControlName="summary"
-        placeholder="'Enter summary' | translate"
+        [attr.placeholder]="'Enter summary' | translate"
         [ngClass]="{'is-invalid': submitted && ticketForm.get('summary')!.errors}">
       <div *ngIf="submitted && ticketForm.get('summary')!.hasError('required')" class="invalid-feedback">
         {{ "Summary is required" | translate }}

@@ -4,9 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Item } from 'src/app/models/item.model';
 import { CollectionService } from 'src/app/services/collection.service';
-import { FormValidationService } from 'src/app/services/form-validation.service';
+import { FormValidationService } from 'src/app/services/validation-form.service';
 import { ItemService } from 'src/app/services/item.service';
 import { LanguageService } from 'src/app/services/language.service';
+import { HandlingMessageService } from 'src/app/services/handling-message.service';
+import { submissionFormService } from 'src/app/services/submission-form.service';
 
 @Component({
   selector: 'app-edit-item',
@@ -27,10 +29,12 @@ export class EditItemComponent {
     private route: ActivatedRoute,
     public collectionService: CollectionService,
     private formValidation: FormValidationService,
+    private handleMessages: HandlingMessageService,
     private router: Router,
     private itemService: ItemService,
     private languageService: LanguageService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private submitForm: submissionFormService
   ) {
     this.itemForm = this.formValidation.itemValidator({} as Item);
   }
@@ -71,19 +75,19 @@ export class EditItemComponent {
 
   updateItem() {
     this.submited = true;
-    this.formValidation.submitItemForm(this.itemForm, this.itemDetails, this.collectionId, (body) =>
+    this.submitForm.submitItemForm(this.itemForm, this.itemDetails, this.collectionId, (body) =>
       this.itemService.updateItem(this.itemDetails.itemId, body))
       .subscribe({
-        next: () => this.formValidation.handleSuccess(this.translate.instant('Item updated successfully'), this.router, '/items', [this.collectionId]),
-        error: (error) => this.formValidation.handleError(error, this.translate.instant('Error updating item'))
+        next: () => this.handleMessages.handleSuccess(this.translate.instant('Item updated successfully'), this.router, '/items', [this.collectionId]),
+        error: (error) => this.handleMessages.handleError(error, this.translate.instant('Error updating item'))
       });
   }
 
   deleteItem(itemId: number) {
     this.itemService.deleteItem(itemId)
       .subscribe(
-        () => this.formValidation.handleSuccess(this.translate.instant('Item deleted successfully'), this.router, '/items', [this.collectionId]),
-        (error) => this.formValidation.handleError(error, this.translate.instant('This item cannot be deleted'))
+        () => this.handleMessages.handleSuccess(this.translate.instant('Item deleted successfully'), this.router, '/items', [this.collectionId]),
+        (error) => this.handleMessages.handleError(error, this.translate.instant('This item cannot be deleted'))
       );
   }
 }

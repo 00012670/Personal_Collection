@@ -3,10 +3,12 @@ import { FormGroup } from '@angular/forms';
 import { CategoryOptions, Collection } from 'src/app/models/collection.model';
 import { CollectionService } from 'src/app/services/collection.service';
 import { UserIdentityService } from 'src/app/services/user-identity.service';
-import { FormValidationService } from 'src/app/services/form-validation.service';
+import { FormValidationService } from 'src/app/services/validation-form.service';
 import { Router } from '@angular/router';
 import { LanguageService } from 'src/app/services/language.service';
 import { TranslateService } from '@ngx-translate/core';
+import { HandlingMessageService } from 'src/app/services/handling-message.service';
+import { submissionFormService } from 'src/app/services/submission-form.service';
 
 @Component({
   selector: 'app-add-collection',
@@ -27,7 +29,9 @@ export class AddCollectionComponent {
     private formValidation: FormValidationService,
     private router: Router,
     private languageService: LanguageService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private handleMessages: HandlingMessageService,
+    private submiForm: submissionFormService
   ) {
     this.collection = {} as Collection;
     this.collectionForm = this.formValidation.collectionValidator({} as Collection);
@@ -41,11 +45,11 @@ export class AddCollectionComponent {
   createCollection(): void {
     this.submited = true;
     this.collection.userId = this.userId;
-    this.formValidation.submitForm(this.collectionForm, this.collection, (body) =>
+    this.submiForm.submitForm(this.collectionForm, this.collection, (body) =>
       this.collectionService.createCollection(body))
       .subscribe(
-        () => this.formValidation.handleSuccess(this.translate.instant('Collection added successfully'), this.router, '/collections'),
-        (error) => this.formValidation.handleError(error, this.translate.instant('Error adding collection'))
+        () => this.handleMessages.handleSuccess(this.translate.instant('Collection added successfully'), this.router, '/collections'),
+        (error) => this.handleMessages.handleError(error, this.translate.instant('Error adding collection'))
       );
   }
 }
