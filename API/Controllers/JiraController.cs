@@ -5,12 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 [Route("[controller]")]
 public class JiraController : ControllerBase
 {
-    private readonly JiraService _jiraService;
 
-    public JiraController(JiraService jiraService)
+    private readonly JiraServiceBase _jiraServiceBase;
+    private readonly JiraIssueService _jiraService;
+    private readonly JiraUserService _jiraUserService;
+    public JiraController(JiraServiceBase jiraServiceBase, JiraIssueService jiraService, JiraUserService jiraUserService)
     {
+        _jiraServiceBase = jiraServiceBase;
         _jiraService = jiraService;
+        _jiraUserService = jiraUserService;
     }
+
 
     [HttpPost("create-jira-ticket")]
     public async Task<IActionResult> CreateJiraTicket([FromBody] JiraTicketRequest request)
@@ -25,7 +30,7 @@ public class JiraController : ControllerBase
     {
         try
         {
-            await _jiraService.CreateUserInJira(request.Email, request.Username, request.Password, request.DisplayName, request.ApplicationRoles);
+            await _jiraUserService.CreateUserInJira(request.Email, request.Username, request.Password, request.DisplayName, request.ApplicationRoles);
             return Ok("User created successfully");
         }
         catch (HttpRequestException ex)
@@ -43,7 +48,7 @@ public class JiraController : ControllerBase
     {
         try
         {
-            var userExists = await _jiraService.UserExistsInJira(email);
+            var userExists = await _jiraUserService.UserExistsInJira(email);
             return Ok(new { userExists });
         }
         catch (HttpRequestException ex)
@@ -58,7 +63,7 @@ public class JiraController : ControllerBase
     {
         try
         {
-            var roles = await _jiraService.GetApplicationRolesAsync();
+            var roles = await _jiraServiceBase.GetApplicationRolesAsync();
             return Ok(roles);
         }
         catch (HttpRequestException ex)

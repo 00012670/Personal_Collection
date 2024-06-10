@@ -103,14 +103,15 @@ export class ModalContent {
     });
   }
 
-  createTicketAndHandleResponse() {
-    if (this.ticketForm.valid) {
-      this.jiraService.createTicket(this.ticketForm.value).subscribe(response => {
-        this.ticketLink = `https://yourjiraurl.atlassian.net/browse/${response.key}`;
-        this.handleMessages.handleSuccess('Ticket created successfully', this.router, '', [], false);
-      });
-    }
+createTicketAndHandleResponse() {
+  if (this.ticketForm.valid) {
+    this.jiraService.createTicket(this.ticketForm.value).subscribe(response => {
+      const parsedKey = JSON.parse(response.key);
+      this.ticketLink = `https://kazimovadinora.atlassian.net/browse/${parsedKey.key}`;
+      this.handleMessages.handleSuccess('Ticket created successfully', this.router, '', [], false);
+    });
   }
+}
 
   onSubmit() {
     this.prepareForm();

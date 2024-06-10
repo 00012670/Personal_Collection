@@ -65,7 +65,9 @@ builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
 );
 builder.Services.AddHttpClient();
-builder.Services.AddScoped<JiraService>();
+builder.Services.AddScoped<JiraServiceBase, JiraService>();
+builder.Services.AddScoped<JiraIssueService>();
+builder.Services.AddScoped<JiraUserService>();
 builder.Logging.AddDebug();
 builder.Logging.AddConsole();
 
