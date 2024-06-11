@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
-import { CategoryOptions, Collection } from 'src/app/models/collection.model';
 import { CollectionService } from 'src/app/services/collection.service';
 import { FormValidationService } from 'src/app/services/validation-form.service';
 import { LanguageService } from 'src/app/services/language.service';
 import { TranslateService } from '@ngx-translate/core';
 import { HandlingMessageService } from 'src/app/services/handling-message.service';
 import { submissionFormService } from 'src/app/services/submission-form.service';
+import { CategoryOptions, Collection } from 'src/app/models/collection';
 
 @Component({
   selector: 'app-edit-collection',

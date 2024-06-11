@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Collection } from '../models/collection.model';
+import { Collection } from '../models/collection';
 import { Observable, throwError } from 'rxjs';
 import { Item } from '../models/item.model';
 import { TranslateService } from '@ngx-translate/core';

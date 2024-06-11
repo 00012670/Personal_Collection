@@ -27,8 +27,15 @@ public class JiraUserService : JiraServiceBase
 
     public async Task<string> CreateUserInJira(string email, string username, string password, string displayName, List<string> applicationRoles)
     {
+        ValidateApplicationRoles(applicationRoles);
+        var user = CreateUserObject(username, password, email, displayName, applicationRoles);
+        await SendUserCreationRequest(user);
+        return user.emailAddress;
+    }
+    
+    private async void ValidateApplicationRoles(List<string> applicationRoles)
+    {
         var validApplicationRoles = await GetApplicationRolesAsync();
-
         foreach (var role in applicationRoles)
         {
             if (!validApplicationRoles.Contains(role))
@@ -36,11 +43,13 @@ public class JiraUserService : JiraServiceBase
                 throw new ArgumentException($"Invalid application role: {role}");
             }
         }
-        var user = CreateUserObject(username, password, email, displayName, applicationRoles);
+    }
+    
+    private async Task SendUserCreationRequest(dynamic user)
+    {
         var json = JsonConvert.SerializeObject(user);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        var response = await SendRequestAndHandleResponse(HttpMethod.Post, $"{_jiraSettings.BaseUrl}/rest/api/2/user", content);
-        return user.emailAddress;
+        await SendRequestAndHandleResponse(HttpMethod.Post, $"{_jiraSettings.BaseUrl}/rest/api/2/user", content);
     }
 
     private dynamic CreateUserObject(string username, string password, string email, string displayName, List<string> applicationRoles)

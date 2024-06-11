@@ -1,4 +1,4 @@
-import { Collection } from "./collection.model";
+import { Collection } from "./collection";
 
 export interface Item {
   itemId: number;

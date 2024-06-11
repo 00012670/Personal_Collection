@@ -9,8 +9,10 @@ import { LanguageService } from 'src/app/services/language.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { Location } from '@angular/common';
 import { CollectionService } from 'src/app/services/collection.service';
-import { Collection } from 'src/app/models/collection.model';
 import { HandlingMessageService } from 'src/app/services/handling-message.service';
+import { UserIdentityService } from 'src/app/services/user-identity.service';
+import { Observable, of, switchMap, tap } from 'rxjs';
+import { Collection } from 'src/app/models/collection';
 
 
 @Component({
@@ -38,6 +40,7 @@ export class ModalContent {
     private collectionService: CollectionService,
     private route: ActivatedRoute,
     private handleMessages: HandlingMessageService,
+    private userIdentity: UserIdentityService
   ) {
     this.ticketForm = this.fb.group({
       summary: ['', Validators.required],
@@ -78,43 +81,67 @@ export class ModalContent {
     this.submitted = true;
     if (this.ticketForm.valid) {
       const currentUrl = window.location.origin + this.location.path();
+      this.ticketForm.patchValue({ reported: this.userIdentity.currentUser.value.email });
       this.ticketForm.patchValue({ collection: this.ticketForm.get('collection')?.value });
       this.ticketForm.patchValue({ link: currentUrl });
     }
   }
-  createUserAndTicket() {
+
+  createUserObject() {
+    const email = this.userIdentity.currentUser.value.email;
+    const username = this.userIdentity.currentUser.value.unique_name;
+    const password = this.userIdentity.currentUser.value.password;
     const user = {
-      email: 'user@example.com',
-      username: 'username',
-      password: 'password',
-      displayName: 'User Name',
+      email: email,
+      username: username,
+      password: password,
+      displayName: 'User',
       applicationRoles: ['jira-software']
     };
-
-    this.jiraService.checkUserExists(user.email).subscribe(response => {
-      if (!response.userExists) {
-        this.jiraService.createUser(user).subscribe(userResponse => {
-          console.log('User created successfully', userResponse);
-          this.createTicketAndHandleResponse();
-        });
-      } else {
-        this.createTicketAndHandleResponse();
-      }
-    });
+    return user;
   }
 
-createTicketAndHandleResponse() {
-  if (this.ticketForm.valid) {
-    this.jiraService.createTicket(this.ticketForm.value).subscribe(response => {
-      const parsedKey = JSON.parse(response.key);
-      this.ticketLink = `https://kazimovadinora.atlassian.net/browse/${parsedKey.key}`;
-      this.handleMessages.handleSuccess('Ticket created successfully', this.router, '', [], false);
-    });
+  checkAndCreateUser(user: any): Observable<any> {
+    return this.jiraService.checkUserExists(user.email).pipe(
+      switchMap(response => {
+        if (!response.userExists) {
+          return this.jiraService.createUser(user);
+        } else {
+          return of(true);
+        }
+      })
+    );
   }
-}
 
-  onSubmit() {
+  validateAndCreateTicket() {
+    if (this.ticketForm.valid) {
+      this.createTicketAndHandleResponse();
+    }
+  }
+
+  createUserAndTicket(): Observable<any> {
+    const user = this.createUserObject();
+    return this.checkAndCreateUser(user).pipe(
+      tap(() => {
+        this.validateAndCreateTicket();
+      })
+    );
+  }
+
+  createTicketAndHandleResponse() {
+    if (this.ticketForm.valid) {
+      this.jiraService.createTicket(this.ticketForm.value).subscribe(response => {
+        const parsedKey = JSON.parse(response.key);
+        this.ticketLink = `https://kazimovadinora.atlassian.net/browse/${parsedKey.key}`;
+        this.handleMessages.handleSuccess('Ticket created successfully', this.router, '', [], false);
+      });
+    }
+  }
+
+  async onSubmit() {
     this.prepareForm();
-    this.createUserAndTicket();
+    if (this.ticketForm.valid) {
+      await this.createUserAndTicket().toPromise();
+    }
   }
 }

@@ -3,27 +3,32 @@
 <div class="centered">
   <h2 class="mt-5">{{"Collections" | translate}}</h2>
   <p class="mt-3 pointer" routerLink="/add-collection">{{"Create collection" | translate}}</p>
-
-  <table class="table table-striped mt-3" [class.table-light]="!isDarkMode" [class.table-dark]="isDarkMode">
-    <thead>
-      <tr>
-        <th scope="col">{{"Name" | translate}}</th>
-        <th scope="col">{{"Description" | translate}}</th>
-        <th scope="col">{{"Category" | translate}}</th>
-        <th scope="col">{{"Items" | translate}}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let collection of collectionList">
-        <td><p class="pointer" [routerLink]="['/edit-collection', collection.collectionId]">{{collection.name}}</p></td>
-        <td>{{collection.description}}</td>
-        <td>{{collectionService.getCategory(collection.category)}}</td>
-        <td>
-          <p class="pointer" [routerLink]="['/items', collection.collectionId]">{{"View" | translate}}</p>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <ng-container *ngIf="collectionList.length > 0; else noCollections">
+    <table class="table table-striped mt-3" [class.table-light]="!isDarkMode" [class.table-dark]="isDarkMode">
+      <thead>
+        <tr>
+          <th scope="col">{{"Name" | translate}}</th>
+          <th scope="col">{{"Description" | translate}}</th>
+          <th scope="col">{{"Category" | translate}}</th>
+          <th scope="col">{{"Items" | translate}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let collection of collectionList">
+          <td>
+            <p class="pointer" [routerLink]="['/edit-collection', collection.collectionId]">{{collection.name}}</p>
+          </td>
+          <td>{{collection.description}}</td>
+          <td>{{collectionService.getCategory(collection.category)}}</td>
+          <td>
+            <p class="pointer" [routerLink]="['/items', collection.collectionId]">{{"View" | translate}}</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-template #noCollections>
+    <h3 class="mt-5">{{"No collections created" | translate}}</h3>
+  </ng-template>
   <app-create-ticket></app-create-ticket>
 </div>
-

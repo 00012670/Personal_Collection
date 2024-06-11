@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Collection } from 'src/app/models/collection.model';
+import { Collection } from 'src/app/models/collection';
 import { Item } from 'src/app/models/item.model';
 import { CollectionService } from 'src/app/services/collection.service';
 import { ItemService } from 'src/app/services/item.service';

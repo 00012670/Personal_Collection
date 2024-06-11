@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map, of, tap } from 'rxjs';
 import { environment } from '../environments/environment';
-import { Collection, CollectionCategory } from '../models/collection.model';
+import { Collection, CollectionCategory } from '../models/collection';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CategoryOptions, Collection } from 'src/app/models/collection.model';
+import { CategoryOptions, Collection } from 'src/app/models/collection';
 import { Role } from 'src/app/models/user.model';
 import { CollectionService } from 'src/app/services/collection.service';
 import { ThemeService } from 'src/app/services/theme.service';

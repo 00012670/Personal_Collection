@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import ValidateForm from 'src/app/helpers/validateForm';
 import { NgToastService } from 'ng-angular-popup';
-import { Collection } from '../models/collection.model';
+import { Collection } from '../models/collection';
 import { Item } from '../models/item.model';
 import { TranslateService } from '@ngx-translate/core';
 
