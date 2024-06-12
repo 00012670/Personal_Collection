@@ -28,6 +28,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CreateTicketComponent } from './components/create-ticket/create-ticket.component';
 import { ModalContent } from './components/create-ticket/create-modal/create-modal.component';
+import { TicketListComponent } from './components/create-ticket/ticket-list/ticket-list.component';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -54,7 +55,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ItemDetailsComponent,
     CommentComponent,
     CreateTicketComponent,
-    ModalContent
+    ModalContent,
+    TicketListComponent
   ],
   imports: [
     BrowserModule,

@@ -112,5 +112,11 @@
   "Ticket created": "Ticket created",
   "No items created": "No items created",
   "Collections": "Collections",
-  "No collections created": "No collections created"
+  "No collections created": "No collections created",
+  "Jira's tickets": "Jira's tickets",
+  "Tickets": "Tickets",
+  "Issue Key": "Issue Key",
+  "Ticket Link": "Ticket Link",
+  "No tickets created": "No tickets created",
+  "View in Jira": "View in Jira"
 }

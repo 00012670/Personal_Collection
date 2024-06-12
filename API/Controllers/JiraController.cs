@@ -1,5 +1,8 @@
 
+using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 [ApiController]
 [Route("[controller]")]
@@ -9,18 +12,22 @@ public class JiraController : ControllerBase
     private readonly JiraServiceBase _jiraServiceBase;
     private readonly JiraIssueService _jiraService;
     private readonly JiraUserService _jiraUserService;
-    public JiraController(JiraServiceBase jiraServiceBase, JiraIssueService jiraService, JiraUserService jiraUserService)
+
+    private readonly IOptions<JiraSettings> _jiraSettings;
+
+    public JiraController(IOptions<JiraSettings> jiraSettings, JiraServiceBase jiraServiceBase, JiraIssueService jiraService, JiraUserService jiraUserService)
     {
         _jiraServiceBase = jiraServiceBase;
         _jiraService = jiraService;
         _jiraUserService = jiraUserService;
+        _jiraSettings = jiraSettings;
     }
 
 
     [HttpPost("create-jira-ticket")]
     public async Task<IActionResult> CreateJiraTicket([FromBody] JiraTicketRequest request)
     {
-        var ticketKey = await _jiraService.CreateIssue(request.Summary, request.Reported, request.Collection, request.Link, request.Priority);
+        var ticketKey = await _jiraService.CreateIssue(request.Summary, request.Username, request.Reported, request.Collection, request.Link, request.Priority);
         return Ok(new { key = ticketKey });
     }
 
@@ -72,4 +79,46 @@ public class JiraController : ControllerBase
         }
     }
 
+    [HttpGet("get-all-users")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        try
+        {
+            var users = await _jiraUserService.GetAllUsers();
+            return Ok(users);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
+    }
+
+    [HttpGet("get-all-issues")]
+    public async Task<IActionResult> GetAllIssues()
+    {
+        try
+        {
+            var issues = await _jiraService.GetAllIssues();
+            return Ok(issues);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
+    }
+
+
+    [HttpGet("get-issues-by-reporter-email/{email}")]
+    public async Task<IActionResult> GetIssuesByReporterEmail(string email)
+    {
+        try
+        {
+            var issues = await _jiraService.GetIssuesByReporterEmail(email);
+            return Ok(issues);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
+    }
 }

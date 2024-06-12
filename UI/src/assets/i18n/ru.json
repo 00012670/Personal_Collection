@@ -114,5 +114,11 @@
   "Ticket created": "Билет создан",
   "No items created": "Нет созданных предметов",
   "Collections": "Коллекции",
-  "No collections created": "Коллекции не созданы"
+  "No collections created": "Коллекции не созданы",
+  "Jira's tickets": "Билеты Jira",
+  "Tickets": "Билеты",
+  "Issue Key": "Ключ проблемы",
+  "Ticket Link": "Ссылка на билет",
+  "No tickets created": "Билеты не созданы",
+  "View in Jira": "Просмотр в Jira"
 }

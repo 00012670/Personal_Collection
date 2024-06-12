@@ -36,12 +36,6 @@ export class JiraService {
     );
   }
 
-
-  getUserTickets(userEmail: string): Observable<any> {
-    const url = `${this.baseApiUrl}/get-user-tickets?email=${userEmail}`;
-    return this.http.get(url);
-  }
-
   checkUserExists(email: string): Observable<any> {
     const url = `${this.baseApiUrl}/Jira/check-user?email=${email}`;
     return this.http.get(url).pipe(
@@ -49,4 +43,10 @@ export class JiraService {
     );
   }
 
+  getIssuesByReporterEmail(email: string): Observable<any> {
+    const url = `${this.baseApiUrl}/Jira/get-issues-by-reporter-email/${email}`;
+    return this.http.get(url).pipe(
+      catchError(this.handleError)
+    );
+  }
 }

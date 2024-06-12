@@ -69,8 +69,6 @@ export class ModalContent {
   }
 
   getCollection(collectionId: string): void {
-    const ITEMS_PATH = '/items/';
-    const desiredUrl = `${window.location.origin}${ITEMS_PATH}${collectionId}`;
     this.collectionService.getCollection(+collectionId).subscribe((collection: Collection) => {
       this.ticketForm.patchValue({ collection: collection.name });
       this.collectionLoaded = true;
@@ -90,11 +88,10 @@ export class ModalContent {
   createUserObject() {
     const email = this.userIdentity.currentUser.value.email;
     const username = this.userIdentity.currentUser.value.unique_name;
-    const password = this.userIdentity.currentUser.value.password;
     const user = {
       email: email,
       username: username,
-      password: password,
+      password: "password",
       displayName: 'User',
       applicationRoles: ['jira-software']
     };

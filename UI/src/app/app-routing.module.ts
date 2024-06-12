@@ -11,6 +11,7 @@ import { ItemComponent } from './components/item/item.component';
 import { AddItemComponent } from './components/item/add-item/add-item.component';
 import { EditItemComponent } from './components/item/edit-item/edit-item.component';
 import { ItemDetailsComponent } from './components/item/item-details/item-details.component';
+import { TicketListComponent } from './components/create-ticket/ticket-list/ticket-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -23,7 +24,8 @@ const routes: Routes = [
   { path: 'items/:collectionId', component: ItemComponent},
   { path: 'add-item/:collectionId', component: AddItemComponent},
   { path: 'edit-item/:id', component: EditItemComponent},
-  { path: 'item-details/:id', component: ItemDetailsComponent}
+  { path: 'item-details/:id', component: ItemDetailsComponent},
+  { path: 'ticket-list', component: TicketListComponent}
 ];
 
 @NgModule({
