@@ -8,6 +8,9 @@ import { LanguageService } from 'src/app/services/language.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalContent } from './create-modal/create-modal.component';
+import { UserIdentityService } from 'src/app/services/user-identity.service';
+import { Router } from '@angular/router';
+import { HandlingMessageService } from 'src/app/services/handling-message.service';
 
 @Component({
   selector: 'app-create-ticket',
@@ -23,9 +26,11 @@ export class CreateTicketComponent {
     private themeService: ThemeService,
     private languageService: LanguageService,
     private translate: TranslateService,
-    private modalService: NgbModal
-
-  ) {}
+    private modalService: NgbModal,
+    private identityService: UserIdentityService,
+    private router: Router,
+    private handleMessages: HandlingMessageService,
+  ) { }
 
   ngOnInit(): void {
     this.themeService.isDarkMode().subscribe(isDarkMode => {
@@ -34,6 +39,11 @@ export class CreateTicketComponent {
   }
 
   open(): void {
-    const modalRef = this.modalService.open(ModalContent);
+    if (this.identityService.isLoggedIn()) {
+      const modalRef = this.modalService.open(ModalContent);
+    } else {
+      this.router.navigate(['login']);
+      this.handleMessages.handleError(null, 'Please login first');
+    }
   }
 }

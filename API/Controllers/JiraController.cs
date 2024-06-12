@@ -23,14 +23,47 @@ public class JiraController : ControllerBase
         _jiraSettings = jiraSettings;
     }
 
-
-    [HttpPost("create-jira-ticket")]
-    public async Task<IActionResult> CreateJiraTicket([FromBody] JiraTicketRequest request)
+    [HttpGet("check-user")]
+    public async Task<IActionResult> CheckUser(string email)
     {
-        var ticketKey = await _jiraService.CreateIssue(request.Summary, request.Username, request.Reported, request.Collection, request.Link, request.Priority);
-        return Ok(new { key = ticketKey });
+        try
+        {
+            var userExists = await _jiraUserService.UserExistsInJira(email);
+            return Ok(new { userExists });
+        }
+        catch (HttpRequestException ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
     }
 
+    [HttpGet("application-roles")]
+    public async Task<IActionResult> GetApplicationRoles()
+    {
+        try
+        {
+            var roles = await _jiraServiceBase.GetApplicationRolesAsync();
+            return Ok(roles);
+        }
+        catch (HttpRequestException ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+    [HttpGet("get-issues-by-reporter-email/{email}")]
+    public async Task<IActionResult> GetIssuesByReporterEmail(string email)
+    {
+        try
+        {
+            var issues = await _jiraService.GetIssuesByReporterEmail(email);
+            return Ok(issues);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
+    }
 
     [HttpPost("create-user")]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
@@ -50,75 +83,10 @@ public class JiraController : ControllerBase
         }
     }
 
-    [HttpGet("check-user")]
-    public async Task<IActionResult> CheckUser(string email)
+    [HttpPost("create-jira-ticket")]
+    public async Task<IActionResult> CreateJiraTicket([FromBody] JiraTicketRequest request)
     {
-        try
-        {
-            var userExists = await _jiraUserService.UserExistsInJira(email);
-            return Ok(new { userExists });
-        }
-        catch (HttpRequestException ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
-    }
-
-
-    [HttpGet("application-roles")]
-    public async Task<IActionResult> GetApplicationRoles()
-    {
-        try
-        {
-            var roles = await _jiraServiceBase.GetApplicationRolesAsync();
-            return Ok(roles);
-        }
-        catch (HttpRequestException ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
-    }
-
-    [HttpGet("get-all-users")]
-    public async Task<IActionResult> GetAllUsers()
-    {
-        try
-        {
-            var users = await _jiraUserService.GetAllUsers();
-            return Ok(users);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { Message = ex.Message });
-        }
-    }
-
-    [HttpGet("get-all-issues")]
-    public async Task<IActionResult> GetAllIssues()
-    {
-        try
-        {
-            var issues = await _jiraService.GetAllIssues();
-            return Ok(issues);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { Message = ex.Message });
-        }
-    }
-
-
-    [HttpGet("get-issues-by-reporter-email/{email}")]
-    public async Task<IActionResult> GetIssuesByReporterEmail(string email)
-    {
-        try
-        {
-            var issues = await _jiraService.GetIssuesByReporterEmail(email);
-            return Ok(issues);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { Message = ex.Message });
-        }
+        var ticketKey = await _jiraService.CreateIssue(request.Summary, request.Username, request.Reported, request.Collection, request.Link, request.Priority);
+        return Ok(new { key = ticketKey });
     }
 }

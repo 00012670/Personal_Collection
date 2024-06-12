@@ -45,17 +45,6 @@ public async Task<string> CreateIssue(string summary, string username, string em
         return new StringContent(json, Encoding.UTF8, "application/json");
     }
 
-    public async Task<string> GetAllIssues()
-    {
-        return await SendRequestAndHandleResponse(HttpMethod.Get, $"{_jiraSettings.BaseUrl}/rest/api/2/search");
-    }
-
-    public async Task<string> GetIssuesByEmailCustomField(string email)
-    {
-        var jql = System.Net.WebUtility.UrlEncode($"project = \"KAN\" AND type = Task AND status IN (Done, \"IN Progress\", Opened, Rejected) AND text ~ \"{email}\" ORDER BY created DESC");
-        return await SendRequestAndHandleResponse(HttpMethod.Get, $"{_jiraSettings.BaseUrl}/rest/api/2/search?jql={jql}");
-    }
-
     public async Task<string> GetIssuesByReporterEmail(string email)
     {
         var jql = System.Net.WebUtility.UrlEncode($"reporter = \"{email}\" ORDER BY created DESC");

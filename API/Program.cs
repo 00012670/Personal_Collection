@@ -1,9 +1,9 @@
-
 using API.Context;
 using API.Models;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Text.Json.Serialization;
@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
         {
             builder
             .AllowAnyOrigin()
-            // .WithOrigins("https://personalcollection.azurewebsites.net/")
+            .WithOrigins("https://personalcollection.azurewebsites.net", "https://personalcollection.azurewebsites.net/")
             .AllowAnyMethod()
             .AllowAnyHeader();
         });
@@ -37,9 +37,9 @@ builder
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers()
-.AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-);
+    .AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+    );
 
 builder.Services.AddSwaggerGen();
 
@@ -71,7 +71,6 @@ builder.Services.AddScoped<JiraUserService>();
 builder.Logging.AddDebug();
 builder.Logging.AddConsole();
 
-
 var app = builder.Build();
 
 // Use developer exception page in development environment
@@ -87,7 +86,6 @@ else
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
-
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
@@ -96,9 +94,54 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
-// Use the localization middleware
-var localizationOptionsService = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
-app.MapControllers();
 app.UseCors("AllowAllOrigins");
+app.UseStaticFiles();
+app.UseDefaultFiles();
+
+
+// Ensure all middleware is registered before performing the database connection check
+app.MapControllers();
+
+var localizationOptionsService = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+if (localizationOptionsService != null)
+{
+    var localizationOptions = localizationOptionsService.Value;
+    app.UseRequestLocalization(localizationOptions);
+}
+else
+{
+    var defaultLocalizationOptions = new RequestLocalizationOptions
+    {
+        DefaultRequestCulture = new RequestCulture("en-US"),
+    };
+    app.UseRequestLocalization(defaultLocalizationOptions);
+}
+app.MapControllers();
+
+// Check database connection after middleware registration
+// using (var scope = app.Services.CreateScope())
+// {
+//     var services = scope.ServiceProvider;
+//     try
+//     {
+//         var context = services.GetRequiredService<DBContext>();
+//         context.Database.OpenConnection();
+//         var logger = services.GetRequiredService<ILogger<Program>>();
+//         logger.LogInformation("Successfully connected to the database.");
+//     }
+//     catch (Exception ex)
+//     {
+//         var logger = services.GetRequiredService<ILogger<Program>>();
+//         logger.LogError(ex, "An error occurred while connecting to the database.");
+//     }
+//     finally
+//     {
+//         var context = services.GetRequiredService<DBContext>();
+//         if (context.Database.GetDbConnection().State == System.Data.ConnectionState.Open)
+//         {
+//             context.Database.CloseConnection();
+//         }
+//     }
+// }
+
 app.Run();

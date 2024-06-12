@@ -9,7 +9,7 @@ public class JiraUserService : JiraServiceBase
         : base(httpClient, jiraSettings, logger)
     {
     }
-    public async Task<User> EnsureUserExists(string email, string username, string password, string displayName, List<string> applicationRoles)
+    public async Task<JiraUser> EnsureUserExists(string email, string username, string password, string displayName, List<string> applicationRoles)
     {
         var user = await GetUserByEmail(email);
         if (user == null)
@@ -19,12 +19,12 @@ public class JiraUserService : JiraServiceBase
         return user;
     }
 
-    public async Task<User> GetUserByEmail(string email)
+    public async Task<JiraUser> GetUserByEmail(string email)
     {
         if (await UserExistsInJira(email))
         {
             var response = await SendRequestAndHandleResponse(HttpMethod.Get, $"{_jiraSettings.BaseUrl}/rest/api/2/user/search?query={email}");
-            var users = JsonConvert.DeserializeObject<List<User>>(response);
+            var users = JsonConvert.DeserializeObject<List<JiraUser>>(response);
             return users.FirstOrDefault();
         }
         return null;
@@ -36,12 +36,12 @@ public class JiraUserService : JiraServiceBase
         return users.Any();
     }
 
-    public async Task<User> CreateUserInJira(string email, string username, string password, string displayName, List<string> applicationRoles)
+    public async Task<JiraUser> CreateUserInJira(string email, string username, string password, string displayName, List<string> applicationRoles)
     {
         ValidateApplicationRoles(applicationRoles);
         var user = CreateUserObject(username, password, email, displayName, applicationRoles);
         var response = await SendUserCreationRequest(user);
-        return JsonConvert.DeserializeObject<User>(response);
+        return JsonConvert.DeserializeObject<JiraUser>(response);
     }
 
     private async void ValidateApplicationRoles(List<string> applicationRoles)
@@ -62,7 +62,6 @@ public class JiraUserService : JiraServiceBase
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         return await SendRequestAndHandleResponse(HttpMethod.Post, $"{_jiraSettings.BaseUrl}/rest/api/2/user", content);
     }
-
     private dynamic CreateUserObject(string username, string password, string email, string displayName, List<string> applicationRoles)
     {
         return new
@@ -74,25 +73,4 @@ public class JiraUserService : JiraServiceBase
             products = applicationRoles
         };
     }
-
-    public class User
-    {
-        public string Self { get; set; }
-        public string AccountId { get; set; }
-        public string AccountType { get; set; }
-        public string EmailAddress { get; set; }
-        public Dictionary<string, string> AvatarUrls { get; set; }
-        public string DisplayName { get; set; }
-        public bool Active { get; set; }
-        public string Locale { get; set; }
-    }
-
-
-
-    public async Task<List<User>> GetAllUsers()
-    {
-        var response = await SendRequestAndHandleResponse(HttpMethod.Get, $"{_jiraSettings.BaseUrl}/rest/api/2/users");
-        return JsonConvert.DeserializeObject<List<User>>(response);
-    }
-
 }

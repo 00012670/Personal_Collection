@@ -14,7 +14,6 @@ import { UserIdentityService } from 'src/app/services/user-identity.service';
 import { Observable, of, switchMap, tap } from 'rxjs';
 import { Collection } from 'src/app/models/collection';
 
-
 @Component({
   selector: 'app-create-modal',
   templateUrl: './create-modal.component.html',
@@ -57,6 +56,18 @@ export class ModalContent {
       this.isDarkMode = isDarkMode;
     });
     this.handleCollection();
+  }
+
+  async onSubmit() {
+    this.prepareForm();
+    if (this.ticketForm.valid) {
+      const response = await this.createUserAndTicket().toPromise();
+      if (response) {
+        const parsedKey = JSON.parse(response.key);
+        this.ticketLink = `https://kazimovadinora.atlassian.net/browse/${parsedKey.key}`;
+        this.handleMessages.handleSuccess('Ticket created successfully', this.router, '', [], false);
+      }
+    }
   }
 
   handleCollection(): void {
@@ -110,35 +121,16 @@ export class ModalContent {
     );
   }
 
-  validateAndCreateTicket() {
-    if (this.ticketForm.valid) {
-      this.createTicketAndHandleResponse();
-    }
-  }
-
   createUserAndTicket(): Observable<any> {
     const user = this.createUserObject();
     return this.checkAndCreateUser(user).pipe(
-      tap(() => {
-        this.validateAndCreateTicket();
+      switchMap(userExists => {
+        if (userExists && this.ticketForm.valid) {
+          return this.jiraService.createTicket(this.ticketForm.value);
+        } else {
+          return of(null);
+        }
       })
     );
-  }
-
-  createTicketAndHandleResponse() {
-    if (this.ticketForm.valid) {
-      this.jiraService.createTicket(this.ticketForm.value).subscribe(response => {
-        const parsedKey = JSON.parse(response.key);
-        this.ticketLink = `https://kazimovadinora.atlassian.net/browse/${parsedKey.key}`;
-        this.handleMessages.handleSuccess('Ticket created successfully', this.router, '', [], false);
-      });
-    }
-  }
-
-  async onSubmit() {
-    this.prepareForm();
-    if (this.ticketForm.valid) {
-      await this.createUserAndTicket().toPromise();
-    }
   }
 }
