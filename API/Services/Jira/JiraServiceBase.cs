@@ -30,7 +30,7 @@ public abstract class JiraServiceBase
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadAsStringAsync();
     }
-
+    
     public async Task<List<string>> GetApplicationRolesAsync()
     {
         var response = await SendRequestAndHandleResponse(HttpMethod.Get, $"{_jiraSettings.BaseUrl}/rest/api/2/applicationrole");

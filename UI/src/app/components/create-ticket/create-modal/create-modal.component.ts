@@ -13,7 +13,7 @@ import { HandlingMessageService } from 'src/app/services/handling-message.servic
 import { UserIdentityService } from 'src/app/services/user-identity.service';
 import { Observable, of, switchMap, tap } from 'rxjs';
 import { Collection } from 'src/app/models/collection';
-
+import { IssueRequest } from 'src/app/models/jira';
 @Component({
   selector: 'app-create-modal',
   templateUrl: './create-modal.component.html',
@@ -61,11 +61,13 @@ export class ModalContent {
   async onSubmit() {
     this.prepareForm();
     if (this.ticketForm.valid) {
-      const response = await this.createUserAndTicket().toPromise();
-      if (response) {
-        const parsedKey = JSON.parse(response.key);
-        this.ticketLink = `https://kazimovadinora.atlassian.net/browse/${parsedKey.key}`;
+      const response = await this.createIssue().toPromise();
+      if (response && response.key) {
+        const parsedKey = response.key;
+        this.ticketLink = `https://kazimovadinora.atlassian.net/browse/${parsedKey}`;
         this.handleMessages.handleSuccess('Ticket created successfully', this.router, '', [], false);
+      } else {
+        console.error('Invalid response format', response);
       }
     }
   }
@@ -96,41 +98,24 @@ export class ModalContent {
     }
   }
 
-  createUserObject() {
+  createRequestObject(): IssueRequest {
     const email = this.userIdentity.currentUser.value.email;
     const username = this.userIdentity.currentUser.value.unique_name;
-    const user = {
+    return {
       email: email,
       username: username,
       password: "password",
       displayName: 'User',
-      applicationRoles: ['jira-software']
+      applicationRoles: ['jira-software'],
+      issueSummary: this.ticketForm.get('summary')?.value,
+      collection: this.ticketForm.get('collection')?.value,
+      link: this.ticketForm.get('link')?.value,
+      priority: this.ticketForm.get('priority')?.value
     };
-    return user;
   }
 
-  checkAndCreateUser(user: any): Observable<any> {
-    return this.jiraService.checkUserExists(user.email).pipe(
-      switchMap(response => {
-        if (!response.userExists) {
-          return this.jiraService.createUser(user);
-        } else {
-          return of(true);
-        }
-      })
-    );
-  }
-
-  createUserAndTicket(): Observable<any> {
-    const user = this.createUserObject();
-    return this.checkAndCreateUser(user).pipe(
-      switchMap(userExists => {
-        if (userExists && this.ticketForm.valid) {
-          return this.jiraService.createTicket(this.ticketForm.value);
-        } else {
-          return of(null);
-        }
-      })
-    );
+  createIssue(): Observable<any> {
+    const userAndIssueRequest = this.createRequestObject();
+    return this.jiraService.createaJiraTicket(userAndIssueRequest);
   }
 }

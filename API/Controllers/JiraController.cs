@@ -1,8 +1,6 @@
 
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 
 [ApiController]
 [Route("[controller]")]
@@ -12,15 +10,17 @@ public class JiraController : ControllerBase
     private readonly JiraServiceBase _jiraServiceBase;
     private readonly JiraIssueService _jiraService;
     private readonly JiraUserService _jiraUserService;
-
+    private readonly JiraIssueService _jiraIssueService;
     private readonly IOptions<JiraSettings> _jiraSettings;
 
-    public JiraController(IOptions<JiraSettings> jiraSettings, JiraServiceBase jiraServiceBase, JiraIssueService jiraService, JiraUserService jiraUserService)
+    public JiraController(IOptions<JiraSettings> jiraSettings, JiraServiceBase jiraServiceBase, JiraIssueService jiraService, JiraUserService jiraUserService, JiraIssueService jiraIssueService)
     {
         _jiraServiceBase = jiraServiceBase;
         _jiraService = jiraService;
         _jiraUserService = jiraUserService;
         _jiraSettings = jiraSettings;
+        _jiraIssueService = jiraIssueService;
+
     }
 
     [HttpGet("check-user")]
@@ -30,20 +30,6 @@ public class JiraController : ControllerBase
         {
             var userExists = await _jiraUserService.UserExistsInJira(email);
             return Ok(new { userExists });
-        }
-        catch (HttpRequestException ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
-    }
-
-    [HttpGet("application-roles")]
-    public async Task<IActionResult> GetApplicationRoles()
-    {
-        try
-        {
-            var roles = await _jiraServiceBase.GetApplicationRolesAsync();
-            return Ok(roles);
         }
         catch (HttpRequestException ex)
         {
@@ -65,13 +51,23 @@ public class JiraController : ControllerBase
         }
     }
 
-    [HttpPost("create-user")]
-    public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
+    [HttpPost("create-jira-ticket")]
+    public async Task<IActionResult> CreateJiraTicket ([FromBody] IssueRequest request)
     {
         try
         {
-            await _jiraUserService.CreateUserInJira(request.Email, request.Username, request.Password, request.DisplayName, request.ApplicationRoles);
-            return Ok("User created successfully");
+            var result = await _jiraIssueService.CreateJiraTicket(
+                request.Email,
+                request.Username,
+                request.Password,
+                request.DisplayName,
+                request.ApplicationRoles,
+                request.IssueSummary,
+                request.Collection,
+                request.Link,
+                request.Priority
+            );
+            return Ok(result);
         }
         catch (HttpRequestException ex)
         {
@@ -81,12 +77,5 @@ public class JiraController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-    }
-
-    [HttpPost("create-jira-ticket")]
-    public async Task<IActionResult> CreateJiraTicket([FromBody] JiraTicketRequest request)
-    {
-        var ticketKey = await _jiraService.CreateIssue(request.Summary, request.Username, request.Reported, request.Collection, request.Link, request.Priority);
-        return Ok(new { key = ticketKey });
     }
 }

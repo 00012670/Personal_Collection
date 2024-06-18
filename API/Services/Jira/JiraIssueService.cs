@@ -6,20 +6,19 @@ using Newtonsoft.Json;
 public class JiraIssueService : JiraServiceBase
 {
     private readonly JiraUserService _jiraUserService;
-
     public JiraIssueService(HttpClient httpClient, IOptions<JiraSettings> jiraSettings, ILogger<JiraIssueService> logger, JiraUserService jiraUserService)
         : base(httpClient, jiraSettings, logger)
     {
         _jiraUserService = jiraUserService;
     }
 
-public async Task<string> CreateIssue(string summary, string username, string email, string collection, Uri link, string priority)
-{
-    var user = await _jiraUserService.EnsureUserExists(email, username, "password", username, new List<string> { "jira-software-users" });
-    var issue = CreateIssueObject(summary, username, email, collection, link, priority, user.AccountId);
-    var content = PrepareRequestContent(issue);
-    return await SendRequestAndHandleResponse(HttpMethod.Post, $"{_jiraSettings.BaseUrl}/rest/api/2/issue", content);
-}
+    public async Task<string> CreateJiraTicket(string email, string username, string password, string displayName, List<string> applicationRoles, string issueSummary, string collection, Uri link, string priority)
+    {
+        var user = await _jiraUserService.EnsureUserExists(email, username, password, displayName, applicationRoles);
+        var issue = CreateIssueObject(issueSummary, username, email, collection, link, priority, user.AccountId);
+        var content = PrepareRequestContent(issue);
+        return await SendRequestAndHandleResponse(HttpMethod.Post, $"{_jiraSettings.BaseUrl}/rest/api/2/issue", content);
+    }
 
     private dynamic CreateIssueObject(string summary, string username, string email, string collection, Uri link, string priority, string reporterAccountId)
     {

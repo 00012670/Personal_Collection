@@ -1,4 +1,4 @@
-public class JiraTicketRequest
+public class TicketRequest
 {
     public string? Summary { get; set; }
 
@@ -7,5 +7,5 @@ public class JiraTicketRequest
     public string? Collection { get; set; }
     public Uri? Link { get; set; }
     public string? Priority { get; set; }
-
+    public List<string>? ApplicationRoles { get; set; }
 }

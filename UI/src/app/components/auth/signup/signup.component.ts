@@ -49,7 +49,6 @@ export class SignupComponent implements AfterViewInit {
     if (this.formValidation.validateForm(this.signUpForm)) {
       this.identityService.signUp(this.signUpForm.value).subscribe(
         (response: any) => {
-          console.log('Signup response:', response);
           const token = response.token;
           const decodedToken = this.identityService.decodeToken(token);
           this.identityService.currentUser.next(decodedToken);

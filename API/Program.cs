@@ -45,8 +45,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DBContext>(o =>
 {
-   // o.UseSqlServer(builder.Configuration.GetConnectionString("ProdConnection"));
-    o.UseSqlServer(builder.Configuration.GetConnectionString("PersonalCollection"));
+    o.UseSqlServer(builder.Configuration.GetConnectionString("ProdConnection"));
+    // o.UseSqlServer(builder.Configuration.GetConnectionString("PersonalCollection"));
 });
 builder.Services.Configure<JiraSettings>(builder.Configuration.GetSection("JiraSettings"));
 

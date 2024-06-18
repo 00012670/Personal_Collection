@@ -17,7 +17,7 @@ public class JiraUserService : JiraServiceBase
             user = await CreateUserInJira(email, username, password, displayName, applicationRoles);
         }
         return user;
-    }
+    }   
 
     public async Task<JiraUser> GetUserByEmail(string email)
     {
@@ -62,6 +62,7 @@ public class JiraUserService : JiraServiceBase
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         return await SendRequestAndHandleResponse(HttpMethod.Post, $"{_jiraSettings.BaseUrl}/rest/api/2/user", content);
     }
+    
     private dynamic CreateUserObject(string username, string password, string email, string displayName, List<string> applicationRoles)
     {
         return new
